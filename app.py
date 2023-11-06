@@ -1,12 +1,29 @@
 from async_oauthlib import OAuth2Session
 
-from quart import Quart, request, redirect, session, url_for, render_template_string
+from quart import Quart, request, redirect, session, url_for, render_template_string,render_template
 from quart.json import jsonify
 from quart_auth import AuthUser, current_user, login_required, login_user, logout_user, QuartAuth, Unauthorized
 import os
 import secrets
-
+listing_id=0
+CLIENT_ID = os.environ['CLIENT_ID']
+CLIENT_SECRET = os.environ['CLIENT_SECRET']
+authorization_base_url = 'https://accounts.google.com/o/oauth2/auth'
+token_url = "https://accounts.google.com/o/oauth2/token"
+get_user_info ='https://www.googleapis.com/userinfo/v2/me?alt=json&access_token={}'
+app_url="https://localhost:5000"
+class Listing():
+    def __init__(self,title,text):
+        global listing_id
+        self.title=title
+        self.text=text
+        self.id=listing_id
+        listing_id+=1
+    @property
+    def url(self):
+        return f"{app_url}/listing/{self.id}"
 totsadb=dict()
+all_listing=[Listing("Listing 1","Listing 1 test"),Listing("Listing 2","Listing 2 test")]
 class User(AuthUser):
     def __init__(self, auth_id):
         super().__init__(auth_id)
@@ -39,12 +56,7 @@ app.secret_key = secrets.token_urlsafe(16)
 auth_manager = QuartAuth(app)
 auth_manager.user_class = User
 # This information is obtained upon registration of a new GitHub
-CLIENT_ID = os.environ['CLIENT_ID']
-CLIENT_SECRET = os.environ['CLIENT_SECRET']
-authorization_base_url = 'https://accounts.google.com/o/oauth2/auth'
-token_url = "https://accounts.google.com/o/oauth2/token"
-get_user_info ='https://www.googleapis.com/userinfo/v2/me?alt=json&access_token={}'
-app_url="https://localhost:5000"
+
 
 @app.route("/login")
 async def login():
@@ -72,14 +84,16 @@ async def redirect_page():
 @app.route("/")
 @login_required
 async def home():
-    print("here")
-    return await render_template_string("""
-        {% if current_user.is_authenticated %}
-          Hello logged in user {{current_user.name}}
-        {% else %}
-          Hello logged out user
-        {% endif %}
-        """)
+    return await render_template("index.html")
+
+@app.route("/listings")
+@login_required
+async def listings():
+    return await render_template("listings.html",listings=all_listing)
+
+@app.route("/listing/<listing_id>")
+async def listinf(listing_id):
+    return await render_template("listing.html", listing=all_listing[int(listing_id)])
 @app.errorhandler(Unauthorized)
 async def redirect_to_login(*_):
     return redirect(url_for("login"))

@@ -1,0 +1,11 @@
+<main>
+    {%  for listing in listings %}
+    <article>
+        <h2>
+            <a href={{listing.url}}>{{listing.title}}</a></h2>
+        <p>{{listing.text|safe}}</p>
+    </article>
+    {% else %}
+    <p>No Listings</p>
+    {% endfor %}
+</main>
