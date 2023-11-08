@@ -12,6 +12,7 @@ export default function Login(){
                     <label className="bottom-96 left-96" for="fname">UCSC Email:</label>
                     <br></br>
                     <input type="text"> 
+                    
                     </input>
                     <br></br>
                     <br></br>
@@ -20,6 +21,10 @@ export default function Login(){
                     <input type="text">
 
                     </input>
+                    <br></br>
+                    <br></br>
+                    
+                    <button className="bg-slate-600" onClick={""}>Login</button>
 
                 </form>    
             </div>
