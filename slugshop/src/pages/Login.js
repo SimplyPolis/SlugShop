@@ -6,7 +6,23 @@ import { directive } from '@babel/types';
 export default function Login(){
     return(
 
-        <div className='bg-black h-96 w-full bg-cover bg-center p-24'>
+        <div>
+            <div className="bg-yellow-300 w-full h-[300px]">
+                <form>
+                    <label className="bottom-96 left-96" for="fname">UCSC Email:</label>
+                    <br></br>
+                    <input type="text"> 
+                    </input>
+                    <br></br>
+                    <br></br>
+                    <label className="bottom-96 left-96" for="fname">Password:</label>
+                    <br></br>
+                    <input type="text">
+
+                    </input>
+
+                </form>    
+            </div>
         </div>
 
     )
