@@ -1,11 +1,23 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
-#root {
+.hash-span {
+  margin-top: -100px;
+  padding-bottom: 100px;
+  display: block;
+}
+
+
+  #root {
     max-width: 1280px;
     text-align: center;
+    font-family: 'Barriecito', cursive;
+    font-family: 'Inconsolata', monospace;  
+    scroll-behavior: smooth;
+    
   }
   
   .logo {

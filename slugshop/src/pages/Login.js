@@ -8,13 +8,13 @@ export default function Login(){
 
         <div>
             <div className="bg-[url('https://collegevine.imgix.net/571e9a11-964f-48a4-83d0-562584d134ac.jpg')] w-screen h-screen">          
-                <div className="pl-[750px] pt-[250px]">
+                <div className="2xl:pl-[750px] 2xl:pt-[250px] xl:pl-[550px] xl:pt-[150px]">
                     <div className="bg-blue-600 rounded-xl w-96 h-96 flex items-center justify-center">
                         <form>
-                            <label className="pl-[-100px]" for="fname">UCSC Email:</label>
+                            <label for="fname">UCSC Email:</label>
                             <br></br>
                             
-                            <input type="text"> 
+                            <input type="email"> 
                             </input>
                             
                             <br></br>
@@ -24,7 +24,7 @@ export default function Login(){
                             
                             <br></br>
                             
-                            <input type="text">
+                            <input type="password">
                             </input>
 
                             <br></br>
