@@ -91,6 +91,19 @@ async def home():
 async def listings():
     return await render_template("listings.html",listings=all_listing)
 
+@app.route("/createlisting")
+@login_required
+async def createListingpage():
+    return await render_template("createlisting.html")
+
+@app.route("/createlistingmethod",methods=["POST"])
+@login_required
+async def createlisting():
+    data = await request.get_data()
+    req_dict={entry.split(b'=')[0]:entry.split(b'=')[1 ]for entry in data.split(b'&')}
+    all_listing.append(Listing(req_dict[b"lname"],req_dict[b"ltext"]))
+    return redirect("/listings")
+
 @app.route("/listing/<listing_id>")
 async def listinf(listing_id):
     return await render_template("listing.html", listing=all_listing[int(listing_id)])
