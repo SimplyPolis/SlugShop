@@ -1,6 +1,6 @@
 from async_oauthlib import OAuth2Session
 
-from quart import Quart, request, redirect, session, url_for, render_template_string, render_template
+from quart import Quart, request, redirect, session, url_for, render_template_string, render_template,send_file
 from quart.json import jsonify
 from quart_auth import AuthUser, current_user, login_required, login_user, logout_user, QuartAuth, Unauthorized
 from quart_uploads import UploadSet, configure_uploads, IMAGES, UploadNotAllowed
@@ -67,7 +67,7 @@ auth_manager = QuartAuth(app)
 auth_manager.user_class = User
 # This information is obtained upon registration of a new GitHub
 
-app.config["UPLOADED_PHOTOS_DEST"] = '.\\listingpics'
+app.config["UPLOADED_PHOTOS_DEST"] = 'listingpics'
 
 uploaded_photos = UploadSet('photos', IMAGES)
 
@@ -132,10 +132,11 @@ async def createlisting():
         print("ooops")
     new_listing = Listing(req_dict["lname"], req_dict["ltext"])
     all_listing.update({new_listing.id: new_listing})
-    try:
-        filename = await uploaded_photos.save(files.get("limage"), folder=new_listing.id)
-    except UploadNotAllowed:
-        print("ooops")
+    for index,image_file in enumerate(files.getlist("limage")):
+        try:
+            filename = await uploaded_photos.save(image_file, folder=new_listing.id,name=f"{index}.")
+        except UploadNotAllowed:
+            print("ooops")
 
     return redirect("/listings")
 
@@ -143,12 +144,15 @@ async def createlisting():
 @app.route("/listing/<listing_id>")
 @login_required
 async def listinf(listing_id):
-    return await render_template("listing.html", listing=all_listing[listing_id])
+    return await render_template("listing.html", listing=all_listing[listing_id],images=os.listdir(f"listingpics/{listing_id}"))
 
-
+@app.route("/listingpics/<listing_id>/<image_name>",methods=["GET"])
+@login_required
+async def getimage(listing_id,image_name):
+    return await send_file(f"listingpics/{listing_id}/{image_name}",mimetype="image/*")
 @app.errorhandler(Unauthorized)
 async def redirect_to_login(*_):
     return redirect(url_for("login"))
 
 
-app.run(host="localhost", port=5000, certfile=".\\localhost.pem", keyfile=".\\localhost-key.pem")
+app.run(host="localhost", port=5000, certfile="localhost.pem", keyfile="localhost-key.pem")
