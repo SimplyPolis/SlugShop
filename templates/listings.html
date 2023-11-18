@@ -2,8 +2,8 @@
     {%  for listing in listings %}
     <article>
         <h2>
-            <a href={{listing.url}}>{{listing.title}}</a></h2>
-        <p>{{listing.text|safe}}</p>
+            <a href={{urls[listing[0]]}}>{{listing[3]}}</a></h2>
+        <p>{{listing[4]|safe}}</p>
     </article>
     {% else %}
     <p>No Listings</p>

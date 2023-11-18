@@ -1,9 +1,11 @@
 from async_oauthlib import OAuth2Session
 
-from quart import Quart, request, redirect, session, url_for, render_template_string, render_template,send_file
+from quart import Quart, request, redirect, session, url_for, render_template_string, render_template, send_file, g, \
+    flash
 from quart.json import jsonify
 from quart_auth import AuthUser, current_user, login_required, login_user, logout_user, QuartAuth, Unauthorized
 from quart_uploads import UploadSet, configure_uploads, IMAGES, UploadNotAllowed
+from quart_db import QuartDB
 import os
 import secrets
 import uuid
@@ -16,62 +18,22 @@ token_url = "https://accounts.google.com/o/oauth2/token"
 get_user_info = 'https://www.googleapis.com/userinfo/v2/me?alt=json&access_token={}'
 app_url = "https://localhost:5000"
 
-
-class Listing():
-    def __init__(self, title, text):
-        self.title = title
-        self.text = text
-        self.id = uuid.uuid4().hex
-
-    @property
-    def url(self):
-        return f"{app_url}/listing/{self.id}"
-
-
-totsadb = dict()
-
-Listing1 = Listing("Listing 1", "Listing 1 test")
-Listing2 = Listing("Listing 2", "Listing 2 test")
-all_listing = {Listing1.id: Listing1, Listing2.id: Listing2}
-
-
-class User(AuthUser):
-    def __init__(self, auth_id):
-        super().__init__(auth_id)
-        self._resolved = False
-        self._email = None
-        self._name = None
-
-    async def _resolve(self):
-        if self._resolved:
-            return
-        user_dict = totsadb.get(self.auth_id)
-        self._email = user_dict["email"]
-        self._name = user_dict["name"]
-        self._resolved = True
-
-    @property
-    async def email(self):
-        await self._resolve()
-        return self._email
-
-    @property
-    async def name(self):
-        await self._resolve()
-        return self._name
-
-
 app = Quart(__name__)
 app.secret_key = secrets.token_urlsafe(16)
-auth_manager = QuartAuth(app)
-auth_manager.user_class = User
-# This information is obtained upon registration of a new GitHub
+
+db = QuartDB(app, url=f"postgresql://postgres:{os.environ["DATABASE_PASSWORD"]}@localhost:5432/slugshop")
 
 app.config["UPLOADED_PHOTOS_DEST"] = 'listingpics'
 
 uploaded_photos = UploadSet('photos', IMAGES)
 
 configure_uploads(app, uploaded_photos)
+auth_manager = QuartAuth(app)
+
+
+
+
+
 
 
 @app.route("/login")
@@ -97,10 +59,15 @@ async def redirect_page():
         request_reponse = await google.get(request_url)
         if request_reponse.ok:
             request_reponse = await request_reponse.json()
-            if not request_reponse["id"] in totsadb:
-                totsadb.update(
-                    {request_reponse["id"]: {"email": request_reponse["email"], "name": request_reponse["name"]}})
-            login_user(User(request_reponse["id"]))
+            print(request_reponse)
+            await g.connection.execute("""INSERT INTO users (user_id, email,name,profile)
+            VALUES
+                (:id, :email, :name, :profile)
+            ON CONFLICT (user_id) DO UPDATE
+            SET (name,profile) = (EXCLUDED.name,EXCLUDED.profile);""",
+                                       {"id": request_reponse["id"], "email": request_reponse["email"],
+                                        "name": request_reponse["name"], "profile": request_reponse.get("picture", "")})
+            login_user(AuthUser(request_reponse["id"]))
         return redirect("/")
 
 
@@ -113,7 +80,10 @@ async def home():
 @app.route("/listings")
 @login_required
 async def listings():
-    return await render_template("listings.html", listings=all_listing.values())
+    listings = await g.connection.fetch_all(
+        "SELECT listing_id,user_id,creation_date,listing_name,listing_description FROM listings WHERE sold = FALSE ORDER BY creation_date;")
+    urls={listing[0]:f"{app_url}/listing/{listing[1]}" for listing in listings}
+    return await render_template("listings.html",listings=listings,urls=urls)
 
 
 @app.route("/createlisting")
@@ -130,11 +100,14 @@ async def createlisting():
         files = (await asyncio.gather(request.files, return_exceptions=True))[0]
     except:
         print("ooops")
-    new_listing = Listing(req_dict["lname"], req_dict["ltext"])
-    all_listing.update({new_listing.id: new_listing})
-    for index,image_file in enumerate(files.getlist("limage")):
+    listing_id=uuid.uuid4().hex
+    await g.connection.execute("""INSERT INTO listings (user_id, listing_id,creation_date,listing_name,listing_description)
+                VALUES
+                    (:user_id, :listing_id,NOW(),:listing_name,:listing_description);""",
+                               {"user_id": current_user.auth_id,"listing_id":listing_id,"listing_name":req_dict["lname"],"listing_description":req_dict["ltext"]})
+    for index, image_file in enumerate(files.getlist("limage")):
         try:
-            filename = await uploaded_photos.save(image_file, folder=new_listing.id,name=f"{index}.")
+            filename = await uploaded_photos.save(image_file, folder=listing_id, name=f"{index}.")
         except UploadNotAllowed:
             print("ooops")
 
@@ -144,12 +117,55 @@ async def createlisting():
 @app.route("/listing/<listing_id>")
 @login_required
 async def listinf(listing_id):
-    return await render_template("listing.html", listing=all_listing[listing_id],images=os.listdir(f"listingpics/{listing_id}"))
+    images=[]
+    try:
+        images=os.listdir(f"listingpics/{listing_id}")
+    except:
+        images=[]
+    user_id,creation_date,listing_name,listing_description=await g.connection.fetch_one("SELECT user_id,creation_date,listing_name,listing_description FROM listings WHERE listing_id LIKE listing_id;",{"listing_id":listing_id})
+    return await render_template("listing.html", title=listing_name,text=listing_description,
+                                 images=images)
 
-@app.route("/listingpics/<listing_id>/<image_name>",methods=["GET"])
+
+@app.route("/listingpics/<listing_id>/<image_name>", methods=["GET"])
 @login_required
-async def getimage(listing_id,image_name):
-    return await send_file(f"listingpics/{listing_id}/{image_name}",mimetype="image/*")
+async def getimage(listing_id, image_name):
+    return await send_file(f"listingpics/{listing_id}/{image_name}", mimetype="image/*")
+
+
+@app.route("/createdb")
+@login_required
+async def createdb():
+    await g.connection.execute(
+        """CREATE TABLE IF NOT EXISTS users (
+        user_id VARCHAR (32) PRIMARY KEY UNIQUE,
+        name VARCHAR ( 50 ) UNIQUE NOT NULL,
+        profile VARCHAR ( 255 ),
+        email VARCHAR ( 255 ) UNIQUE NOT NULL
+        );""")
+
+    await g.connection.execute("""CREATE TABLE IF NOT EXISTS listings (
+user_id VARCHAR (32) NOT NULL UNIQUE,
+listing_id VARCHAR (32) NOT NULL UNIQUE,
+creation_date TIMESTAMP NOT NULL,
+listing_name TEXT NOT NULL,
+listing_description TEXT NOT NULL,
+sold BOOL NOT NULL DEFAULT FALSE,
+PRIMARY KEY (user_id, listing_id),
+FOREIGN KEY (user_id)
+  REFERENCES users (user_id)
+);""")
+    return redirect("/")
+
+
+@app.route("/deletedb")
+@login_required
+async def deletedb():
+    await g.connection.execute("""DROP TABLE IF EXISTS users CASCADE;""")
+    await g.connection.execute("""DROP TABLE IF EXISTS listings;""")
+    return redirect("/")
+
+
 @app.errorhandler(Unauthorized)
 async def redirect_to_login(*_):
     return redirect(url_for("login"))
