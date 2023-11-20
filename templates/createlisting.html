@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Listing</title>
+</head>
+<body>
+<form action="/createlistingmethod" method="post" enctype=multipart/form-data>
+  <label for="lname">Listing Name:</label>
+  <input type="text" id="lname" name="lname" required><br><br>
+  <label for="ltext">Description:</label>
+  <input type="text" id="ltext" name="ltext" required><br><br>
+    <label for="limage">Image:</label>
+  <input type="file" id="limage" name="limage"multiple required accept="image/*"><br><br>
+  <button type="submit">Submit</button>
+
+</form>
+</body>
+</html>
