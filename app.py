@@ -80,11 +80,17 @@ async def listings():
 @app.route("/getlistings", methods=["GET"])
 @login_required
 async def getListings():
-    req_dict = await request.form
-    listings = await g.connection.fetch_all(
-        "SELECT * FROM listings WHERE sold = :sold_status ORDER BY :sort LIMIT :limit OFFSET :offset;",
+    req_dict = request.args
+    if req_dict.get("query"):
+        listings = await g.connection.fetch_all(
+        "SELECT * FROM listings WHERE query @@ websearch_to_tsquery('english',:query) and sold = :sold_status ORDER BY TS_RANK(query,websearch_to_tsquery('english',:query)) DESC, :sort LIMIT :limit OFFSET :offset;",
         {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
-         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0)})
+         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0), "query": req_dict.get("query")})
+    else:
+        listings = await g.connection.fetch_all(
+            "SELECT * FROM listings WHERE  sold = :sold_status ORDER BY :sort LIMIT :limit OFFSET :offset;",
+            {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
+             "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0)})
 
     return jsonify([dict(listing) for listing in listings ])
 
@@ -152,7 +158,7 @@ async def getimage(listing_id, image_name):
 
 
 @app.route("/createdb")
-@login_required
+
 async def createdb():
     await g.connection.execute(
         """CREATE TYPE categories as ENUM (
@@ -176,11 +182,13 @@ listing_description TEXT NOT NULL,
 sold BOOL NOT NULL DEFAULT FALSE,
 price INT NOT NULL DEFAULT 0,
 category categories NOT NULL,
+query TSVECTOR GENERATED ALWAYS AS (setweight(to_tsvector('english',coalesce(listing_name,'')),'A') ||setweight(to_tsvector('english',coalesce(listing_description,'')),'B')) STORED,
 
 
 FOREIGN KEY (user_id)
   REFERENCES users (user_id)
 );""")
+    await g.connection.execute("""CREATE INDEX IF NOT EXISTS query_idx ON listings USING GIN(query)""")
     return redirect("/")
 
 
@@ -190,6 +198,7 @@ async def deletedb():
     await g.connection.execute("""DROP TABLE IF EXISTS users CASCADE;""")
     await g.connection.execute("""DROP TABLE IF EXISTS listings;""")
     await g.connection.execute("""DROP TYPE IF EXISTS categories;""")
+    await g.connection.execute("""DROP INDEX IF EXISTS query_idx CASCADE;""")
     return redirect("/")
 
 

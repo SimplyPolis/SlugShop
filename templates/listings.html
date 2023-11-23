@@ -6,11 +6,36 @@
     <title>Listings</title>
 </head>
 <body>
+
+    <label for="query">Listing Name:</label>
+    <input type="search" id="query" name="query" required><br><br>
+    <button onclick="updatePage()">Search</button>
+
 <main id="main">
 
 </main>
 
 </body>
+<script>
+   function updatePage() {
+        $('#main').empty()
+
+        const url = `/getlistings?query=${query.value}`;
+
+        // Populate dropdown with list of provinces
+        $.getJSON(url, function (data) {
+            $.each(data, function (key, entry) {
+                $('#main').append(`<article>
+        <h2>
+            <a href=/listing/${entry.listing_id}>${entry.listing_name}</a></h2>
+        <p>${entry.listing_description}</p>
+    </article>`);
+
+            })
+        });
+
+    }
+</script>
 <script>
     $(function () {
         const url = '/getlistings';
