@@ -31,11 +31,6 @@ configure_uploads(app, uploaded_photos)
 auth_manager = QuartAuth(app)
 
 
-
-
-
-
-
 @app.route("/login")
 async def login():
     async with OAuth2Session(CLIENT_ID, scope=["https://www.googleapis.com/auth/userinfo.profile", "openid",
@@ -59,7 +54,6 @@ async def redirect_page():
         request_reponse = await google.get(request_url)
         if request_reponse.ok:
             request_reponse = await request_reponse.json()
-            print(request_reponse)
             await g.connection.execute("""INSERT INTO users (user_id, email,name,profile)
             VALUES
                 (:id, :email, :name, :profile)
@@ -74,57 +68,81 @@ async def redirect_page():
 @app.route("/")
 @login_required
 async def home():
-    return await render_template("index.html")
+    return await render_template("home.html")
 
 
 @app.route("/listings")
 @login_required
 async def listings():
-    listings = await g.connection.fetch_all(
-        "SELECT listing_id,user_id,creation_date,listing_name,listing_description FROM listings WHERE sold = FALSE ORDER BY creation_date;")
-    urls={listing[0]:f"{app_url}/listing/{listing[1]}" for listing in listings}
-    return await render_template("listings.html",listings=listings,urls=urls)
+    return await render_template("listings.html")
 
 
-@app.route("/createlisting")
+@app.route("/getlistings", methods=["GET"])
 @login_required
-async def createListingpage():
-    return await render_template("createlisting.html")
+async def getListings():
+    req_dict = await request.form
+    listings = await g.connection.fetch_all(
+        "SELECT * FROM listings WHERE sold = :sold_status ORDER BY :sort LIMIT :limit OFFSET :offset;",
+        {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
+         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0)})
+
+    return jsonify([dict(listing) for listing in listings ])
 
 
-@app.route("/createlistingmethod", methods=["POST"])
+
+
+@app.route("/getcategories", methods=["GET"])
+@login_required
+async def getcategories():
+    categories=await g.connection.fetch_one(
+        "SELECT ENUM_RANGE(NULL::categories)")
+
+    return jsonify([ {"category":category} for category in categories["enum_range"]])
+
+
+@app.route("/createlisting", methods=["GET","POST"])
 @login_required
 async def createlisting():
-    req_dict = await request.form
-    try:
-        files = (await asyncio.gather(request.files, return_exceptions=True))[0]
-    except:
-        print("ooops")
-    listing_id=uuid.uuid4().hex
-    await g.connection.execute("""INSERT INTO listings (user_id, listing_id,creation_date,listing_name,listing_description)
-                VALUES
-                    (:user_id, :listing_id,NOW(),:listing_name,:listing_description);""",
-                               {"user_id": current_user.auth_id,"listing_id":listing_id,"listing_name":req_dict["lname"],"listing_description":req_dict["ltext"]})
-    for index, image_file in enumerate(files.getlist("limage")):
-        try:
-            filename = await uploaded_photos.save(image_file, folder=listing_id, name=f"{index}.")
-        except UploadNotAllowed:
-            print("ooops")
 
-    return redirect("/listings")
+    if request.method == 'POST':
+        req_dict = await request.form
+        try:
+            files = (await asyncio.gather(request.files, return_exceptions=True))[0]
+        except:
+            print("ooops")
+        listing_id = uuid.uuid4().hex
+
+        await g.connection.execute("""INSERT INTO listings (user_id, listing_id,creation_date,listing_name,listing_description,category,price)
+                    VALUES
+                        (:user_id, :listing_id,NOW(),:listing_name,:listing_description,:category,:price);""",
+                                   {"user_id": current_user.auth_id, "listing_id": listing_id,
+                                    "listing_name": req_dict["name"], "listing_description": req_dict["text"],"category":req_dict["categories"],"price":int(req_dict["price"])})
+
+        for index, image_file in enumerate(files.getlist("images")):
+            try:
+                filename = await uploaded_photos.save(image_file, folder=listing_id, name=f"{index}.")
+            except UploadNotAllowed:
+                print("ooops")
+
+        return redirect("/listings")
+    else:
+        return await render_template("createlisting.html")
+
 
 
 @app.route("/listing/<listing_id>")
 @login_required
-async def listinf(listing_id):
-    images=[]
+async def listing(listing_id):
+    images = []
     try:
-        images=os.listdir(f"listingpics/{listing_id}")
+        images = os.listdir(f"listingpics/{listing_id}")
     except:
-        images=[]
-    user_id,creation_date,listing_name,listing_description=await g.connection.fetch_one("SELECT user_id,creation_date,listing_name,listing_description FROM listings WHERE listing_id LIKE listing_id;",{"listing_id":listing_id})
-    return await render_template("listing.html", title=listing_name,text=listing_description,
-                                 images=images)
+        images = []
+    user_id, creation_date, listing_name, listing_description = await g.connection.fetch_one(
+        "SELECT user_id,creation_date,listing_name,listing_description FROM listings WHERE listing_id = :listing_id;",
+        {"listing_id": listing_id})
+    return await render_template("listing.html", title=listing_name, text=listing_description,
+                                 images=images, id=listing_id)
 
 
 @app.route("/listingpics/<listing_id>/<image_name>", methods=["GET"])
@@ -137,21 +155,29 @@ async def getimage(listing_id, image_name):
 @login_required
 async def createdb():
     await g.connection.execute(
+        """CREATE TYPE categories as ENUM (
+        'test1',
+        'test2'
+        );""")
+    await g.connection.execute(
         """CREATE TABLE IF NOT EXISTS users (
-        user_id VARCHAR (32) PRIMARY KEY UNIQUE,
+        user_id VARCHAR (32) PRIMARY KEY NOT NULL UNIQUE,
         name VARCHAR ( 50 ) UNIQUE NOT NULL,
         profile VARCHAR ( 255 ),
         email VARCHAR ( 255 ) UNIQUE NOT NULL
         );""")
 
     await g.connection.execute("""CREATE TABLE IF NOT EXISTS listings (
-user_id VARCHAR (32) NOT NULL UNIQUE,
-listing_id VARCHAR (32) NOT NULL UNIQUE,
+user_id VARCHAR (32) NOT NULL,
+listing_id VARCHAR (32) PRIMARY KEY NOT NULL UNIQUE,
 creation_date TIMESTAMP NOT NULL,
 listing_name TEXT NOT NULL,
 listing_description TEXT NOT NULL,
 sold BOOL NOT NULL DEFAULT FALSE,
-PRIMARY KEY (user_id, listing_id),
+price INT NOT NULL DEFAULT 0,
+category categories NOT NULL,
+
+
 FOREIGN KEY (user_id)
   REFERENCES users (user_id)
 );""")
@@ -163,6 +189,7 @@ FOREIGN KEY (user_id)
 async def deletedb():
     await g.connection.execute("""DROP TABLE IF EXISTS users CASCADE;""")
     await g.connection.execute("""DROP TABLE IF EXISTS listings;""")
+    await g.connection.execute("""DROP TYPE IF EXISTS categories;""")
     return redirect("/")
 
 

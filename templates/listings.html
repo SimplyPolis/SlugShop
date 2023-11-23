@@ -1,11 +1,32 @@
-<main>
-    {%  for listing in listings %}
-    <article>
-        <h2>
-            <a href={{urls[listing[0]]}}>{{listing[3]}}</a></h2>
-        <p>{{listing[4]|safe}}</p>
-    </article>
-    {% else %}
-    <p>No Listings</p>
-    {% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Listings</title>
+</head>
+<body>
+<main id="main">
+
 </main>
+
+</body>
+<script>
+    $(function () {
+        const url = '/getlistings';
+
+        // Populate dropdown with list of provinces
+        $.getJSON(url, function (data) {
+            $.each(data, function (key, entry) {
+                $('#main').append(`<article>
+        <h2>
+            <a href=/listing/${entry.listing_id}>${entry.listing_name}</a></h2>
+        <p>${entry.listing_description}</p>
+    </article>`);
+
+            })
+        });
+
+    })
+</script>
+</html>

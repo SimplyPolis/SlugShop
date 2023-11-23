@@ -1,19 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Create Listing</title>
 </head>
 <body>
-<form action="/createlistingmethod" method="post" enctype=multipart/form-data>
-  <label for="lname">Listing Name:</label>
-  <input type="text" id="lname" name="lname" required><br><br>
-  <label for="ltext">Description:</label>
-  <input type="text" id="ltext" name="ltext" required><br><br>
-    <label for="limage">Image:</label>
-  <input type="file" id="limage" name="limage"multiple required accept="image/*"><br><br>
-  <button type="submit">Submit</button>
+<form action="/createlisting" method="post" enctype=multipart/form-data>
+    <label for="lname">Listing Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    <label for="text">Description:</label>
+    <input type="text" id="text" name="text" required><br><br>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required><br><br>
+    <label for="image">Images:</label>
+    <input type="file" id="images" name="images" multiple required accept="image/*"><br><br>
+    <label for="categories">Category:</label>
+    </div>
+    <select id="categories" class="form-control" name="categories"> required
+    </select>
+    </div>
+    <button type="submit">Submit</button>
 
 </form>
+
 </body>
+<script>
+    $(function () {
+        const url = '/getcategories';
+
+        // Populate dropdown with list of provinces
+        $.getJSON(url, function (data) {
+            $.each(data, function (key, entry) {
+                $('#categories').append($('<option/>').attr("value", entry.category).text(entry.category));
+
+            })
+        });
+
+    })
+</script>
 </html>
