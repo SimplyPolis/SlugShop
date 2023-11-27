@@ -3,7 +3,7 @@ import React from 'react';
 import App from '../App'
 import NavBarOther from '../components/NavBarOther';
 import { directive } from '@babel/types';
-import { AppBar, Avatar, Typography, createTheme } from '@mui/material';
+import { AppBar, Avatar, Divider, Typography, createTheme } from '@mui/material';
 import {Toolbar} from '@mui/material';
 import { Container } from '@mui/material';
 import { Grid } from '@mui/material';
@@ -28,21 +28,36 @@ export default function UserListing(){
                     <Typography fontSize="30px" spacing={30}className="pt-[9rem]">
                         Vintage Sweater
                     </Typography>
+                    <div className=" pl-[9rem]">
+                        <Divider className="w-[18rem]"/>
+                    </div>
                     <Typography className=" pr-44">
                         $15.99
                     </Typography>
+                    <div className=" pl-[9rem]">
+                        <Divider className="w-[18rem]"/>
+                    </div>
                     <Typography className="pr-44">
                         Size: L
                     </Typography>
+                    <div className=" pl-[9rem]">
+                        <Divider className="w-[18rem]"/>
+                    </div>
                     <Typography className="pr-[7rem]">
                         Condition: New
                     </Typography>
+                    <div className=" pl-[9rem]">
+                        <Divider className="w-[18rem]"/>
+                    </div>
                     
                 </Grid>
                 <Grid item xs={5}>
                     
                     <Typography className=" pl-[6rem]">
-                    <button className="bg-blue-900 text-slate-50 rounded w-[21rem] h-14" onClick={""}>Contact Seller</button>
+                    Contact Seller:
+                    </Typography>
+                    <Typography className=" pl-[6rem]">
+                    mialaniz@ucsc.edu                        
                     </Typography>
                     
                 </Grid>
