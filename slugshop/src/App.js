@@ -25,7 +25,7 @@ function App() {
       <ThemeProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/login" index element = {<Login/>}/>
+          <Route index element = {<Login/>}/>
           <Route path="/user" element ={<UserListing/>}/>
           <Route path="/create" element={<CreateListing/>}/>
           <Route path="/home" element={<HomePage/>}/>
