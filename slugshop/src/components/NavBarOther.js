@@ -14,7 +14,7 @@ export default function NavBarOther(){
                 <Toolbar className="bg-blue-900" varient = "dense">
                     <Avatar src="https://seeklogo.com/images/U/uc-santa-cruz-banana-slugs-logo-96320729C8-seeklogo.com.png"/>
                     <Typography className=" pl-3">SlugShop</Typography>
-                    <div className="pl-[68rem]">
+                    <div className="xl:pl-[68rem] 2xl:pl-[100rem]">
                         <div className="bg-yellow-500 rounded-md w-[7rem]">
                             <Link to="/create" className="bg-yellow-500 rounded w-28 btn btn-primary">
                                 <Typography>Create Post</Typography>
