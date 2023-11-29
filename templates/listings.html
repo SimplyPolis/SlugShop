@@ -6,11 +6,11 @@
     <title>Listings</title>
 </head>
 <body>
-
+<form id="form">
     <label for="query">Listing Name:</label>
     <input type="search" id="query" name="query" required><br><br>
     <button onclick="updatePage()">Search</button>
-
+</form>
 <main id="main">
 
 </main>
@@ -20,7 +20,10 @@
    function updatePage() {
         $('#main').empty()
 
-        const url = `/getlistings?query=${query.value}`;
+
+        let formData = new FormData(${form});
+        let search = new URLSearchParams(formData);
+        const url = `/getlistings?query=${search.toString()}`;
 
         // Populate dropdown with list of provinces
         $.getJSON(url, function (data) {
