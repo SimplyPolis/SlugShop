@@ -1,7 +1,6 @@
 from async_oauthlib import OAuth2Session
 
-from quart import Quart, request, redirect, session, url_for, render_template_string, render_template, send_file, g, \
-    flash
+from quart import Quart, request, redirect, session, url_for, render_template_string, render_template, send_file, g
 from quart.json import jsonify
 from quart_auth import AuthUser, current_user, login_required, login_user, logout_user, QuartAuth, Unauthorized
 from quart_uploads import UploadSet, configure_uploads, IMAGES, UploadNotAllowed
@@ -81,17 +80,15 @@ async def listings():
 @login_required
 async def getListings():
     req_dict = request.args
-    if req_dict.get("query"):
-        listings = await g.connection.fetch_all(
-        "SELECT * FROM listings WHERE query @@ websearch_to_tsquery('english',:query) and sold = :sold_status ORDER BY TS_RANK(query,websearch_to_tsquery('english',:query)) DESC, :sort LIMIT :limit OFFSET :offset;",
+    try:
+        listings =(await asyncio.gather(g.connection.fetch_all(
+        f"SELECT * FROM listings WHERE {"query @@ websearch_to_tsquery('english',:query) and" if req_dict.get("query") else ""} {"user_id = :user_id and" if req_dict.get("user_id") else ""} {"category = :category and" if req_dict.get("category") else ""} sold = :sold_status ORDER BY {"TS_RANK(query,websearch_to_tsquery('english',:query)) DESC,"if req_dict.get("query") else ""} :sort LIMIT :limit OFFSET :offset;",
         {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
-         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0), "query": req_dict.get("query")})
-    else:
-        listings = await g.connection.fetch_all(
-            "SELECT * FROM listings WHERE  sold = :sold_status ORDER BY :sort LIMIT :limit OFFSET :offset;",
-            {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
-             "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0)})
-
+         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0), "query": req_dict.get("query"),"user_id":req_dict.get("user_id"),"category":req_dict.get("category")}), return_exceptions=True))[0]
+    except:
+        listings=[]
+    if type(listings) != list:
+        listings=[]
     return jsonify([dict(listing) for listing in listings ])
 
 
