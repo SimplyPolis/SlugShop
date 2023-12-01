@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
-import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, BrowserRouter, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import App from '../App'
 import NavBarOther from '../components/NavBarOther';
 import { directive } from '@babel/types';
@@ -10,64 +10,70 @@ import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import { TextField } from '@mui/material';
 import { IconButton } from '@mui/material';
+import jQuery from 'jquery';
+import axios from 'axios';
 
 
 export default function CreateListing(){
 
-    const [listing, setListing]= useState({
-
-        item_name: "",
-        price: "",
-        size: "",
-        condition: ""
+    const {id} = useParams();
+    const [listings, setListings] = useState({
+        name: '',
+        price: '',
+        size: '',
+        condition: ''
     })
 
-    const handleInputs = (e)=>{
-        let namee = e.target.name;
-        let value = e.target.value;
-        setListing({...listing,[namee]:value})
-    }
+    useEffect(() =>{
 
-    const postData = async(e)=>{
-        e.preventDefault()
-        const {item_name, price, size, condition} = listing
-        const res = await fetch('/createlisting', {
-            
-
+        axios.get('/getlistings?query='+listings.name)
+        .then(res => {
+            setListings({...listings, name: res.data.name, price: res.data.price, size: res.data.size, condition: res.data.condition})
         })
+        .catch(err => console.log(err))
+    }, [])
+
+    
+    const handleClick = (e) => {
+        e.preventDefault();
+        axios.put('/getlistings?query='+ listings.name, listings)
+        .then(res => {
+            alert("created");
+        })
+        .catch(err => console.log(err))
+
     }
-
-
     return(
 
         <>
             <NavBarOther/>
-            <Grid container className="pt-[8rem] pl-16" spacing={5} columnSpacing={5}>
-                <Grid item xs={20}>
-                    
-                        <Typography fontSize="30px">Item Name:</Typography>
-                        <TextField id="standard-basic" variant="standard" value={listing.item_name} onChange={handleInputs}/>
-
-                        <Typography className="pr-[5.5rem]" fontSize="30px">Price:</Typography>
-                        <TextField id="standard-basic" variant="standard" value={listing.price} onChange={handleInputs}/>
-
-                        <Typography className="pr-[6.4rem]" fontSize="30px">Size:</Typography>
-                        <TextField id="standard-basic" variant="standard" value={listing.size} onChange={handleInputs}/>
+            <form>
+                <Grid container className="pt-[8rem] pl-16" spacing={5} columnSpacing={5}>
+                    <Grid item xs={20}>
                         
-                        <Typography className="pr-[2rem]" fontSize="30px">Condition:</Typography>
-                        <TextField id="standard-basic" variant="standard" value={listing.condition} onChange={handleInputs}/>
-                    
+                            <Typography fontSize="30px">Item Name:</Typography>
+                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, name: e.target.value})}/>
+
+                            <Typography className="pr-[5.5rem]" fontSize="30px">Price:</Typography>
+                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, price: e.target.value})}/>
+
+                            <Typography className="pr-[6.4rem]" fontSize="30px">Size:</Typography>
+                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, size: e.target.value})}/>
+                            
+                            <Typography className="pr-[2rem]" fontSize="30px">Condition:</Typography>
+                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, condition: e.target.value})}/>
+                        
+                    </Grid>
+                    <Grid item xs={20}>
+                        <Typography>
+                            <button onClick={handleClick} className="bg-yellow-500 rounded w-20 text-white">
+                                Post
+                            </button>
+
+                        </Typography>
+                    </Grid>
                 </Grid>
-            <Grid item xs={20}>
-                <Typography>
-                    <button className="bg-yellow-500 rounded w-20 text-white">
-                        Post
-                    </button>
-
-                </Typography>
-            </Grid>
-            </Grid>
-
+            </form>
         </>
     )
 }
