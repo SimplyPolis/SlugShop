@@ -82,9 +82,9 @@ async def getListings():
     req_dict = request.args
     try:
         listings =(await asyncio.gather(g.connection.fetch_all(
-        f"SELECT * FROM listings WHERE {"query @@ websearch_to_tsquery('english',:query) and" if req_dict.get("query") else ""} {"user_id = :user_id and" if req_dict.get("user_id") else ""} {"category = :category and" if req_dict.get("category") else ""} sold = :sold_status ORDER BY {"TS_RANK(query,websearch_to_tsquery('english',:query)) DESC,"if req_dict.get("query") else ""} :sort LIMIT :limit OFFSET :offset;",
+        f"SELECT * FROM listings WHERE {"query @@ websearch_to_tsquery('english',:query) and" if req_dict.get("query") else ""} {"user_id = :user_id and" if req_dict.get("user_id") else ""} {"listing_id = :listing_id and" if req_dict.get("listing_id") else ""} {"category = :category and" if req_dict.get("category") else ""} sold = :sold_status ORDER BY {"TS_RANK(query,websearch_to_tsquery('english',:query)) DESC,"if req_dict.get("query") else ""} :sort LIMIT :limit OFFSET :offset;",
         {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
-         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0), "query": req_dict.get("query"),"user_id":req_dict.get("user_id"),"category":req_dict.get("category")}), return_exceptions=True))[0]
+         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0), "query": req_dict.get("query"),"user_id":req_dict.get("user_id"),"category":req_dict.get("category"),"listing_id":req_dict.get("listing_id")}), return_exceptions=True))[0]
     except:
         listings=[]
     if type(listings) != list:
@@ -115,18 +115,20 @@ async def createlisting():
             print("ooops")
         listing_id = uuid.uuid4().hex
 
-        await g.connection.execute("""INSERT INTO listings (user_id, listing_id,creation_date,listing_name,listing_description,category,price)
-                    VALUES
-                        (:user_id, :listing_id,NOW(),:listing_name,:listing_description,:category,:price);""",
-                                   {"user_id": current_user.auth_id, "listing_id": listing_id,
-                                    "listing_name": req_dict["name"], "listing_description": req_dict["text"],"category":req_dict["categories"],"price":int(req_dict["price"])})
 
+        image_names=[]
         for index, image_file in enumerate(files.getlist("images")):
             try:
                 filename = await uploaded_photos.save(image_file, folder=listing_id, name=f"{index}.")
+                image_names.append(filename)
             except UploadNotAllowed:
                 print("ooops")
-
+        await g.connection.execute("""INSERT INTO listings (user_id, listing_id,creation_date,listing_name,listing_description,category,price,images)
+                                VALUES
+                                    (:user_id, :listing_id,NOW(),:listing_name,:listing_description,:category,:price,:images);""",
+                                       {"user_id": current_user.auth_id, "listing_id": listing_id,
+                                        "listing_name": req_dict["name"], "listing_description": req_dict["text"],
+                                        "category": req_dict["categories"], "price": int(req_dict["price"]),"images":image_names})
         return redirect("/listings")
     else:
         return await render_template("createlisting.html")
@@ -136,27 +138,40 @@ async def createlisting():
 @app.route("/listing/<listing_id>")
 @login_required
 async def listing(listing_id):
-    images = []
-    try:
-        images = os.listdir(f"listingpics/{listing_id}")
-    except:
-        images = []
-    user_id, creation_date, listing_name, listing_description = await g.connection.fetch_one(
-        "SELECT user_id,creation_date,listing_name,listing_description FROM listings WHERE listing_id = :listing_id;",
-        {"listing_id": listing_id})
-    return await render_template("listing.html", title=listing_name, text=listing_description,
-                                 images=images, id=listing_id)
+    return await render_template("listing.html")
 
 
-@app.route("/listingpics/<listing_id>/<image_name>", methods=["GET"])
+@app.route("/listingpics/<image_name>", methods=["GET"])
 @login_required
-async def getimage(listing_id, image_name):
-    return await send_file(f"listingpics/{listing_id}/{image_name}", mimetype="image/*")
+async def getImage(image_name):
+    return await send_file(f"listingpics/{image_name}", mimetype="image/*")
+
+@app.route("/getuserinfo")
+@login_required
+async def getUserInfo():
+    user = await g.connection.fetch_one(
+        "SELECT * FROM users WHERE user_id = :user_id;",
+        {"user_id": current_user.auth_id})
+    return jsonify(dict(user))
+
+@app.route("/deletelisting/<listing_id>")
+@login_required
+async def deleteListing(listing_id):
+
+    user = await g.connection.fetch_one(
+        "SELECT user_id FROM listings WHERE listing_id = :listing_id;",
+        {"listing_id": listing_id})
+
+    if user.get("user_id")!=current_user.auth_id:
+        print("Here")
+        raise Unauthorized()
+    await g.connection.execute("""DELETE FROM listings WHERE listing_id = :listing_id""",{"listing_id":listing_id})
+
+    return redirect("/listings")
 
 
 @app.route("/createdb")
-
-async def createdb():
+async def createDB():
     await g.connection.execute(
         """CREATE TYPE categories as ENUM (
         'test1',
@@ -179,6 +194,7 @@ listing_description TEXT NOT NULL,
 sold BOOL NOT NULL DEFAULT FALSE,
 price INT NOT NULL DEFAULT 0,
 category categories NOT NULL,
+images text[],
 query TSVECTOR GENERATED ALWAYS AS (setweight(to_tsvector('english',coalesce(listing_name,'')),'A') ||setweight(to_tsvector('english',coalesce(listing_description,'')),'B')) STORED,
 
 
