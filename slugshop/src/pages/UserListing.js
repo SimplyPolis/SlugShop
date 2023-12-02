@@ -8,11 +8,14 @@ import {Toolbar} from '@mui/material';
 import { Container } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
+import $ from 'jquery';
 
 
 export default function UserListing(){
+    
     return(
         <>
+            
             <NavBarOther/>  
             <Grid container spacing={1} rowSpacing={1}>
                 <Grid item xs={5} spacing={12} className="pt-32">

@@ -16,57 +16,58 @@ import axios from 'axios';
 
 export default function CreateListing(){
 
-    const {id} = useParams();
     const [listings, setListings] = useState({
-        name: '',
-        price: '',
-        size: '',
-        condition: ''
-    })
+
+        name: "",
+        price: "",
+        size: "",
+        condition: ""
+
+    });
 
     useEffect(() =>{
 
-        axios.get('/getlistings?query='+listings.name)
-        .then(res => {
-            setListings({...listings, name: res.data.name, price: res.data.price, size: res.data.size, condition: res.data.condition})
-        })
-        .catch(err => console.log(err))
+        const fetchData = async () => {
+            try {
+              const response = await fetch('/your-api-endpoint');
+              const result = await response.json();
+              setListings(result);
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          };
+          fetchData();
     }, [])
 
     
-    const handleClick = (e) => {
-        e.preventDefault();
-        axios.put('/getlistings?query='+ listings.name, listings)
-        .then(res => {
-            alert("created");
-        })
-        .catch(err => console.log(err))
-
+    const handleSubmit = (e) => {
+       e.preventDefault();
+       console.log(listings.name, listings.price, listings.size, listings.condition);
     }
     return(
 
         <>
             <NavBarOther/>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <Grid container className="pt-[8rem] pl-16" spacing={5} columnSpacing={5}>
                     <Grid item xs={20}>
                         
                             <Typography fontSize="30px">Item Name:</Typography>
-                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, name: e.target.value})}/>
+                            <TextField id="standard-basic" variant="standard" value={listings.name} onChange={e => setListings({...listings, name: e.target.value})}/>
 
                             <Typography className="pr-[5.5rem]" fontSize="30px">Price:</Typography>
-                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, price: e.target.value})}/>
+                            <TextField id="standard-basic" variant="standard" value={listings.price}onChange={e => setListings({...listings, price: e.target.value})}/>
 
                             <Typography className="pr-[6.4rem]" fontSize="30px">Size:</Typography>
-                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, size: e.target.value})}/>
+                            <TextField id="standard-basic" variant="standard" value={listings.size} onChange={e => setListings({...listings, size: e.target.value})}/>
                             
                             <Typography className="pr-[2rem]" fontSize="30px">Condition:</Typography>
-                            <TextField id="standard-basic" variant="standard" onChange={e => setListings({...listings, condition: e.target.value})}/>
+                            <TextField id="standard-basic" variant="standard" value={listings.condition} onChange={e => setListings({...listings, condition: e.target.value})}/>
                         
                     </Grid>
                     <Grid item xs={20}>
                         <Typography>
-                            <button onClick={handleClick} className="bg-yellow-500 rounded w-20 text-white">
+                            <button className="bg-yellow-500 rounded w-20 text-white">
                                 Post
                             </button>
 
