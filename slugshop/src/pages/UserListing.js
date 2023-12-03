@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import App from '../App'
 import NavBarOther from '../components/NavBarOther';
 import { directive } from '@babel/types';
@@ -13,6 +13,20 @@ import $ from 'jquery';
 
 export default function UserListing(){
     
+    const[listing, setListings] = useState([])
+
+    useEffect(() => {
+        fetch('http://localhost:8000/listings')
+            .then(res =>{
+                return res.json();
+            })
+            .then(data => {
+                setListings(data);
+                console.log(data);
+            });
+
+    }, []);
+
     return(
         <>
             
@@ -27,28 +41,43 @@ export default function UserListing(){
                     
                 </Grid>  
                 <Grid item className=" pt-72" xs={5}> 
+        
+                    {listing.map (listing_name => (
+                        <Typography fontSize="30px" spacing={30}className="pt-[9rem]">
+                            {listing_name.name}
+                        </Typography>
+                    ))}
+
+                    <div className=" pl-[9rem]">
+                        <Divider className="w-[18rem]"/>
+                    </div>
                     
-                    <Typography fontSize="30px" spacing={30}className="pt-[9rem]">
-                        Vintage Sweater
-                    </Typography>
+                    {listing.map(listing_price => (
+                        <Typography className=" pr-44">
+                            ${listing_price.price}
+                        </Typography>
+                    ))}
+
                     <div className=" pl-[9rem]">
                         <Divider className="w-[18rem]"/>
                     </div>
-                    <Typography className=" pr-44">
-                        $15.99
-                    </Typography>
+                    
+                    {listing.map(listing_size => (
+                        <Typography className="pr-44">
+                            Size: {listing_size.size}
+                        </Typography>
+                    ))}
+
                     <div className=" pl-[9rem]">
                         <Divider className="w-[18rem]"/>
                     </div>
-                    <Typography className="pr-44">
-                        Size: L
-                    </Typography>
-                    <div className=" pl-[9rem]">
-                        <Divider className="w-[18rem]"/>
-                    </div>
-                    <Typography className="pr-[7rem]">
-                        Condition: New
-                    </Typography>
+
+                    {listing.map(listing_condition => (
+                        <Typography className="pr-[7rem]">
+                            Condition: {listing_condition.condition}
+                        </Typography>
+                    ))}    
+
                     <div className=" pl-[9rem]">
                         <Divider className="w-[18rem]"/>
                     </div>
