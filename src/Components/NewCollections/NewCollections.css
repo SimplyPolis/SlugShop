@@ -22,3 +22,26 @@
     margin-top: 50px;
     gap: 30px;
 }
+/* ... existing styles ... */
+
+.user-listings {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 columns of equal width */
+    gap: 20px; /* Adjust the space between grid items */
+    padding: 20px; /* Adds some padding around the grid */
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .user-listings {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns on smaller screens */
+    }
+  }
+  
+  /* Further adjustments for very small screens */
+  @media (max-width: 480px) {
+    .user-listings {
+      grid-template-columns: 1fr; /* 1 column on very small screens */
+    }
+  }
+  

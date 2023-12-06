@@ -1,4 +1,4 @@
-import React from 'react'
+/*import React from 'react'
 import './NewCollections.css'
 import new_collection from '../Assets/new_collections'
 import Item from '../Item/Item'
@@ -18,3 +18,44 @@ const NewCollections = () => {
 }
 
 export default NewCollections
+*/
+
+import React, { useState, useEffect } from 'react';
+import './NewCollections.css';
+import Item from '../Item/Item';
+
+const NewCollections = () => {
+  const [collections, setCollections] = useState([]);
+
+  useEffect(() => {
+    // Fetch the JSON file from the public folder
+    fetch('/getlistings_1.json') // Assuming getlistings_1.json is in the public folder
+      .then(response => response.json())
+      .then(data => {
+        setCollections(data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the collections:', error);
+      });
+  }, []);
+
+  return (
+    <div className='new-collections'>
+      <h1>NEW LISTINGS</h1>
+      <hr />
+      <div className="user-listings">
+        {collections.map((item, i) => (
+          <Item 
+            key={i} 
+            id={item.listing_id} 
+            name={item.listing_name} 
+            image={item.images[0]} // Assuming you want to display the first image
+            price={item.price} // Assuming 'price' is the new price
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default NewCollections;
