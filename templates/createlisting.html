@@ -1,31 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <html lang="en"><head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Create Listing</title>
-</head>
-<body>
-<form action="/createlisting" method="post" enctype=multipart/form-data>
-    <label for="name">Listing Name:</label>
-    <input type="text" id="name" name="name" required><br><br>
+  <style type="text/css">
+@import url("/static/createlisting.css");
+#navele {
+}
+  #navele {
+}
+  #navele {
+}
+  </style>
+  </head>
+  <body>
+  <nav id="navbar"> 
+	
+    <a href="/"> <img src="https://seeklogo.com/images/U/uc-santa-cruz-banana-slugs-logo-96320729C8-seeklogo.com.png" heigh="100" width="100"</img></a>
+    <a href="/account" class="navele">Account</a>
+    <a href="/listings" class="navele">Listings</a>
+	<a href="/createlisting" class="navele">Create Listing</a>
+  </nav>
+  <form action="/createlisting" method="post" enctype="multipart/form-data" id="form">
+    <label for="name">Item Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <br>
     <label for="text">Description:</label>
-    <input type="textarea" id="text" name="text" required><br><br>
+    <input type="textarea" id="textarea" name="text" rows="4" required>
+    <br>
+    <br>
     <label for="price">Price:</label>
-    <input type="number" id="price" name="price" required><br><br>
+    <input type="number" id="price" name="price" required>
+    <br>
+    <br>
     <label for="image">Images:</label>
-    <input type="file" id="images" name="images" multiple required accept="image/*"><br><br>
+    <input type="file" id="images" name="images" multiple required accept="image/*">
+    <br>
+    <br>
     <label for="categories">Category:</label>
-    </div>
-    <select id="categories" class="form-control" name="categories"> required
+    <select id="categories" class="form-control" name="categories">
+       required
+    
     </select>
-    </div>
-    <button type="submit">Submit</button>
-
-</form>
-
-</body>
-<script>
+    <button type="submit" id="submit">Submit</button>
+  </form>
+  </body>
+  <script>
     $(function () {
         const url = '/getcategories';
 
@@ -39,4 +60,5 @@
 
     })
 </script>
-</html>
+  </html>
+</nav>

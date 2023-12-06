@@ -23,7 +23,6 @@ app.secret_key = secrets.token_urlsafe(16)
 db = QuartDB(app, url=f"postgresql://postgres:{os.environ["DATABASE_PASSWORD"]}@localhost:5432/slugshop")
 
 app.config["UPLOADED_PHOTOS_DEST"] = 'listingpics'
-
 uploaded_photos = UploadSet('photos', IMAGES)
 
 configure_uploads(app, uploaded_photos)
@@ -138,13 +137,22 @@ async def createlisting():
 @app.route("/listing/<listing_id>")
 @login_required
 async def listing(listing_id):
-    return await render_template("listing.html")
+    images = []
+    try:
+        images = os.listdir(f"listingpics/{listing_id}")
+    except:
+        images = []
+    user_id, creation_date, listing_name, listing_description = await g.connection.fetch_one(
+        "SELECT user_id,creation_date,listing_name,listing_description FROM listings WHERE listing_id = :listing_id;",
+        {"listing_id": listing_id})
+    return await render_template("listing.html", title=listing_name, text=listing_description,
+                                 images=images, id=listing_id)
 
 
-@app.route("/listingpics/<image_name>", methods=["GET"])
+@app.route("/listingpics/<path:path>", methods=["GET"])
 @login_required
-async def getImage(image_name):
-    return await send_file(f"listingpics/{image_name}", mimetype="image/*")
+async def getImage(path):
+    return await send_file(f"listingpics/{path}", mimetype="image/*")
 
 @app.route("/getuserinfo")
 @login_required
@@ -213,6 +221,8 @@ async def deletedb():
     await g.connection.execute("""DROP TYPE IF EXISTS categories;""")
     await g.connection.execute("""DROP INDEX IF EXISTS query_idx CASCADE;""")
     return redirect("/")
+
+
 
 
 @app.errorhandler(Unauthorized)

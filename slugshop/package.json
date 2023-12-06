@@ -1,6 +1,7 @@
 {
   "name": "slugshop",
   "version": "0.1.0",
+  "proxy": "https://localhost:5000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -10,16 +11,19 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
+    "jquery": "^3.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
     "react-scripts": "^5.0.1",
+    "use-file-picker": "^2.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "postbuild": "react-snap",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,7 +48,11 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
+    "react-snap": "^1.23.0",
     "tailwind": "^4.0.0",
     "tailwindcss": "^3.3.5"
+  },
+  "reactSnap": {
+    "inlineCss": true
   }
 }
