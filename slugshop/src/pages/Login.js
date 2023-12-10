@@ -9,7 +9,7 @@ import { useGoogleLogin, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/g
 export default function Login(){
     
     const login = useGoogleLogin({
-        onSuccess: tokenResponse => console.log(tokenResponse),
+        onSuccess: window.location.href='localhost:3000/create',
       });
     
     
@@ -20,7 +20,15 @@ export default function Login(){
                 <div className="2xl:pl-[750px] 2xl:pt-[250px] xl:pl-[550px] xl:pt-[150px]">
                     <div className="bg-blue-900 rounded-xl w-96 h-96 flex items-center justify-center">
                         <form>
-                        <Link to="/create" onClick={() => login()}>Sign in with Google 🚀</Link>;
+                        <GoogleLogin
+                        onSuccess={credentialResponse => {
+                            console.log(credentialResponse);
+                            window.location.href="/create";
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                        />
                         </form>
                     </div>    
                 </div>

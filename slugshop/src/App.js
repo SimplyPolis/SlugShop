@@ -34,7 +34,7 @@ function App() {
           
         </Routes>
       </Router>
-      </GoogleOAuthProvider>;
+      </GoogleOAuthProvider>
       </ThemeProvider>
     </>
   );
