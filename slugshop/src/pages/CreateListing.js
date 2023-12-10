@@ -66,42 +66,15 @@ useEffect(() => {
 
                         <Typography fontSize="30px">Item Name:</Typography>
                         <TextField id="standard-basic" variant="standard" value={name}
-                                   onChange={(e) => setName(e.target.value)} required/>
-
+                                   onChange={(e) => setName(e.target.value)}/>
                         <Typography className="pr-[5.5rem]" fontSize="30px">Description:</Typography>
                         <TextField id="standard-basic" variant="standard" value={description}
-                                   onChange={(e) => setDescription(e.target.value)} multiline
-                                   rows={4} required/>
+                                   onChange={(e) => setDescription(e.target.value)}/>
                         <Typography className="pr-[6.4rem]" fontSize="30px">Price:</Typography>
                         <TextField id="standard-basic" variant="standard" type="number" name="price"
-                                   onChange={(e) => setPrice(e.target.value)} required/>
-
-
+                                   onChange={(e) => setPrice(e.target.value)}/>
                         <Typography className="pr-[5.5rem]" fontSize="30px">Category:</Typography>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={category}
-                            label="Category"
-                            onChange={(e) => setCategory(e.target.value)}
-                        >
-                            {
-                                values.map((vals, i) => <MenuItem key={i} value={vals.category}>{vals.category}</MenuItem>)
-                            }
-                        </Select>
 
-
-                        <div>
-                            <button onClick={() => openFilePicker()}>Select files</button>
-                            <br/>
-                            {filesContent.map((file, index) => (
-                                <div key={index}>
-                                    <h2>{file.name}</h2>
-                                    <img alt={file.name} src={file.content}></img>
-                                    <br/>
-                                </div>
-                            ))}
-                        </div>
 
                     </Grid>
                     <Grid item xs={20}>

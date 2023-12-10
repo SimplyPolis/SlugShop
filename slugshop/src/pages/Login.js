@@ -8,9 +8,6 @@ export default function Login(){
     return(
 
         <div>
-            <a href="/home">home</a>
-              <a href="/user">listings</a>
-              <a href="/create">create</a>
             <div className="bg-[url('https://collegevine.imgix.net/571e9a11-964f-48a4-83d0-562584d134ac.jpg')] w-screen h-screen">          
                 <div className="2xl:pl-[750px] 2xl:pt-[250px] xl:pl-[550px] xl:pt-[150px]">
                     <div className="bg-blue-900 rounded-xl w-96 h-96 flex items-center justify-center">
