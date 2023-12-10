@@ -16,11 +16,6 @@ import {useFilePicker} from 'use-file-picker';
 import jQuery from 'jquery';
 import axios from 'axios';
 
-
-
-
-
-
 export default function CreateListing() {
     const [values, setValues] = useState([])
 
