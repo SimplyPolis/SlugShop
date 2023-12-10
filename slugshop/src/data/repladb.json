@@ -1,0 +1,11 @@
+{
+  "listings": [
+    {
+      "name": "Vintage Sweater",
+      "price": "15.99",
+      "size": "L",
+      "condition": "New",
+      "id": 1
+    }
+  ]
+}

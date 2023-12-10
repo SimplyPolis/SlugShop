@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
-import React from 'react';
+import React, { useEffect } from 'react';
 import App from '../App'
 import NavBarOther from '../components/NavBarOther';
 import { directive } from '@babel/types';
@@ -13,11 +13,13 @@ import { IconButton } from '@mui/material';
 
 
 export default function HomePage(){
+    
+    
+    
     return(
-
-
         <>
             <NavBarOther/>
+            
 
         </>
     )
