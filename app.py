@@ -154,13 +154,23 @@ async def listing(listing_id):
 async def getImage(path):
     return await send_file(f"listingpics/{path}", mimetype="image/*")
 
-@app.route("/getuserinfo")
+@app.route("/getcurrentuser")
 @login_required
-async def getUserInfo():
+async def getCurrentUserInfo():
     user = await g.connection.fetch_one(
         "SELECT * FROM users WHERE user_id = :user_id;",
         {"user_id": current_user.auth_id})
     return jsonify(dict(user))
+
+@app.route("/getuserinfo/<user_id>")
+@login_required
+async def getUserInfo(user_id):
+    return_dict={"is_current_user":user_id==current_user.auth_id}
+    user = await g.connection.fetch_one(
+        "SELECT * FROM users WHERE user_id = :user_id;",
+        {"user_id": user_id})
+    return_dict.update(dict(user))
+    return jsonify(return_dict)
 
 @app.route("/deletelisting/<listing_id>")
 @login_required

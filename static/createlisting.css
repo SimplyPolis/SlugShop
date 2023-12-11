@@ -1,5 +1,5 @@
 @charset "utf-8";
-@import url("webfonts/JosefinSans_VariableFont_wght/stylesheet.css");
+@import url("/static/stylesheet.css");
 
 #form {
     margin: auto;
@@ -24,6 +24,7 @@
     border-bottom-left-radius: 153px auto;
     border-bottom-right-radius: 153px auto;
     border-top-left-radius: 153px auto;
+    color: White;
     background-color: rgba(234,179,8,1.00);
     /* Add this as a property for a selector to which the effect has to be applied*/
 

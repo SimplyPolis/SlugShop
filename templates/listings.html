@@ -4,25 +4,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Listings</title>
-<link href="static/listings.css" rel="stylesheet" type="text/css">
+<link href="/static/listings.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<nav id="navbar"> 
 	
-    <a href="/"><img src="https://seeklogo.com/images/U/uc-santa-cruz-banana-slugs-logo-96320729C8-seeklogo.com.png" heigh="100" width="100"</img></a>
+    <a href="/"><img src="https://seeklogo.com/images/U/uc-santa-cruz-banana-slugs-logo-96320729C8-seeklogo.com.png" heigh="100" width="100"></a>
     <a href="/account" class="navele">Account</a>
     <a href="/listings" class="navele">Listings</a>
 	<a href="/createlisting" class="navele">Create Listing</a>
   </nav>
 
-   
-    <input type="search" id="query" name="query" placeholder="Search"required><br><br>
-    <button id="submit" onclick="updatePage()">Search</button>
-
+   <form id="form" action="javascript:updatePage()">
+<input  type="search" id="query" name="query" placeholder="Search">
+<br><input class="radio_buttons" type="radio" id="date_desc" name="sort" value="creation_date DESC">
+  <label class="radio_buttons" for="date_desc">Date descending</label>
+  <br><input class="radio_buttons" type="radio" id="date_asc" name="sort" value="creation_date ASC">
+  <label class="radio_buttons" for="date_asc">Date ascending </label>
+<br><input class="radio_buttons" type="radio" id="price_desc" name="sort" value="price DESC">
+  <label class="radio_buttons" for="price_desc">Price descending</label>
+  <br><input class="radio_buttons" type="radio" id="price_asc" name="sort" value="price ASC">
+  <label class="radio_buttons" for="price_asc">Price ascending </label>
+	   <label for="categories">Category:</label>
+    <select id="categories" class="radio_buttons" name="categories">
+    </select>
+    <button id="submit" type="submit">Search</button>
+</form>
 <main id="main">
 <ol id="ol">
 	
-
 	</ol>
 </main>
 
@@ -30,16 +40,18 @@
 <script>
    function updatePage() {
         $('#ol').empty()
-
-       const url = `/getlistings?query=${query.value}`;
+        let formData = new FormData(document.getElementById("form"));
+         let search = new URLSearchParams(formData);
+         console.log(search.toString())
+       const url = `/getlistings?${search.toString()}`;
 
         // Populate dropdown with list of provinces
         $.getJSON(url, function (data) {
             $.each(data, function (key, entry) {
-                     $('#ol').append(`<li>
+                     $('#ol').append(`<li class="listelm">
 		<a href="/listing/${entry.listing_id}"><img src="/listingpics/${entry.images[0]}" heigh="100" width="100"</img></a> <br></br>
 	<a href="/listing/${entry.listing_id}">${entry.listing_name}</a>
-        <p class="listdesc">${entry.listing_description}</p>
+        <p class="listdesc">${entry.price}$</p>
 	</li>`);
 
             })
@@ -54,11 +66,25 @@
         // Populate dropdown with list of provinces
         $.getJSON(url, function (data) {
             $.each(data, function (key, entry) {
-                $('#ol').append(`<li>
+                $('#ol').append(`<li class="listelm">
 		<a href="/listing/${entry.listing_id}"><img src="/listingpics/${entry.images[0]}" heigh="100" width="100"</img></a> <br></br>
 	<a href="/listing/${entry.listing_id}">${entry.listing_name}</a>
-        <p class="listdesc">${entry.listing_description}</p>
+        <p class="listdesc">${entry.price}$</p>
 	</li>`);
+
+            })
+        });
+
+    })
+</script>
+	<script>
+    $(function () {
+        const url = '/getcategories';
+
+        // Populate dropdown with list of provinces
+        $.getJSON(url, function (data) {
+            $.each(data, function (key, entry) {
+                $('#categories').append($('<option/>').attr("value", entry.category).text(entry.category));
 
             })
         });

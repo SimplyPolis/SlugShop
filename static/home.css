@@ -2,54 +2,7 @@
 @import url("/static/stylesheet.css");
 
 
-#form {
-    margin: margin-left;
-    position: static;
-    width: 12%;
-    font-family: "JosefinSans VariableFont wght";
-    font-size: 30px;
-    height: 8%;
 
-
-
-}
-#textarea {
-    width: auto;
-    max-width: 100%;
-    max-height: 100%;
-    height: auto;
-}
-#submit {
-	font-family: "JosefinSans VariableFont wght";
-    font-size: 20px;
-    border-bottom-left-radius: 153px auto;
-    border-bottom-right-radius: 153px auto;
-    border-top-left-radius: 153px auto;
-    color: White;
-    background-color: rgba(234,179,8,1.00);
-    /* Add this as a property for a selector to which the effect has to be applied*/
-
-	
-    width: 56%;
-    /* [disabled]margin-top: 0px; */
-    /* Chrome and Safari */
-    -webkit-border-top-left-radius: 40px;
-    -webkit-border-top-right-radius: 40px;
-    -webkit-border-bottom-right-radius: 40px;
-    -webkit-border-bottom-left-radius: 40px;
-    /* Firefox */
-    -moz-border-radius-topleft: 40px;
-    -moz-border-radius-topright: 40px;
-    -moz-border-radius-bottomright: 40px;
-    -moz-border-radius-bottomleft: 40px;
-    /* Standard Syntax */
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
-    border-bottom-left-radius: 40px;
-    border-width: 0;
-    /* [disabled]height: 15%; */
-}
 
 #navbar {
     font-family: "JosefinSans VariableFont wght";
@@ -118,4 +71,8 @@
 	 display: inline;
 	float: left;
 	margin-left: 20%
+}
+#recent{
+	font-family: "JosefinSans VariableFont wght";
+    font-size: 30pt;
 }
