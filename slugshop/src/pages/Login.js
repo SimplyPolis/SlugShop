@@ -18,7 +18,7 @@ export default function Login(){
                         <GoogleLogin
                         onSuccess={credentialResponse => {
                             console.log(credentialResponse);
-                            window.location.href="/create";
+                            window.location.href="/home";
                         }}
                         onError={() => {
                             console.log('Login Failed');

@@ -19,35 +19,23 @@ import axios from 'axios';
 export default function CreateListing() {
     const [values, setValues] = useState([])
 
-useEffect(() => {
-    fetch("/getcategories").then((data) => data.json()).then((val) => setValues(val)).catch((error) => {
-  console.log(error)
-})
-}, [])
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
-    const {openFilePicker, filesContent, loading, errors} = useFilePicker({
-        readAs: 'DataURL',
-        accept: 'image/*',
-        multiple: true
-    })
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const listings = {name, price, description, category, filesContent};
+        const listings = {name, price, description, category};
         const id = 0;
         console.log(category)
-        axios
-            .post("/createlisting", listings)
+        fetch('http://localhost:8000/listings', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(listings)
+        })
 
-            .then(() => {
-                console.log(listings)
-            }).catch((error) => {
-            console.log("failed to update");
-        });
     }
 
 
@@ -62,13 +50,15 @@ useEffect(() => {
                         <Typography fontSize="30px">Item Name:</Typography>
                         <TextField id="standard-basic" variant="standard" value={name}
                                    onChange={(e) => setName(e.target.value)}/>
-                        <Typography className="pr-[5.5rem]" fontSize="30px">Description:</Typography>
+                        <Typography className="" fontSize="30px">Description:</Typography>
                         <TextField id="standard-basic" variant="standard" value={description}
                                    onChange={(e) => setDescription(e.target.value)}/>
                         <Typography className="pr-[6.4rem]" fontSize="30px">Price:</Typography>
                         <TextField id="standard-basic" variant="standard" type="number" name="price"
                                    onChange={(e) => setPrice(e.target.value)}/>
-                        <Typography className="pr-[5.5rem]" fontSize="30px">Category:</Typography>
+                        <Typography className="pr-[1rem]" fontSize="30px">Category:</Typography>
+                        <TextField id="standard-basic" variant="standard" name="category" value={category}
+                                   onChange={(e) => setCategory(e.target.value)}/>
 
 
                     </Grid>
