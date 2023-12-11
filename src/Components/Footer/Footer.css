@@ -10,6 +10,12 @@
     align-items: center;
     gap: 20px;
 }
+
+.footer-logo img {
+    width: 50px; /* Adjust the width as needed */
+    height: auto; /* This will maintain the aspect ratio of the logo */
+}
+
 .footer-logo p{
     color: #383838;
     font-size: 46px;

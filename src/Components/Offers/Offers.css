@@ -5,7 +5,7 @@
     margin: auto;
     padding: 0px 140px;
     margin-bottom: 150px;
-    background: linear-gradient(180deg, #fde1ff 0%,#e1ffea22 60%);;
+    background: linear-gradient(180deg, #e1ecff 0%,#e1ffea22 60%);;
 }
 .offers-left{
     flex: 1;
@@ -42,4 +42,9 @@
     align-items: center;
     justify-content: flex-end;
     padding-top: 50px;
+}
+
+.exclusive_image img {
+    width: 50px; /* Adjust the width as needed */
+    height: auto; /* This will maintain the aspect ratio of the logo */
 }

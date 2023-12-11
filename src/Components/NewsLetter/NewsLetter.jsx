@@ -1,13 +1,12 @@
 import React from 'react'
 import './NewsLetter.css'
+import logo_1 from '../Assets/navbarlogo.png'
 const NewsLetter = () => {
   return (
     <div className='newsletter'>
-      <h1>Get Exclusive Offers On Your Email</h1>
-      <p>Subscribe to our newletter and stay updated</p>
-      <div>
-        <input type="email" placeholder='Your Email id' />
-        <button>Subscribe</button>
+      <div className="hero-right">
+        <img src={logo_1} alt="" />
+        <p>SLUGSHOP</p>
       </div>
     </div>
   )

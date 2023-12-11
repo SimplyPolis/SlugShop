@@ -39,7 +39,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 
-import logo from '../Assets/logo.png';
+import logo from '../Assets/navbarlogo.png';
 
 const Navbar = () => {
   const [menu, setMenu] = useState("shop");
