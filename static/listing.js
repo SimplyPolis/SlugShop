@@ -4,11 +4,13 @@ showSlides(slide_index);
 
 // Next/previous controls
 function plusSlides(n) {
+
     showSlides(slide_index += n);
 }
 
 // Thumbnail image controls
 function currentSlide(n) {
+    setTimeout(() => console.log("First"), 200)
     showSlides(slide_index = n);
 }
 

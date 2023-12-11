@@ -44,8 +44,6 @@
          let search = new URLSearchParams(formData);
          console.log(search.toString())
        const url = `/getlistings?${search.toString()}`;
-
-        // Populate dropdown with list of provinces
         $.getJSON(url, function (data) {
             $.each(data, function (key, entry) {
                      $('#ol').append(`<li class="listelm">

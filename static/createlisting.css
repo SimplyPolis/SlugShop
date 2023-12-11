@@ -1,11 +1,14 @@
 @charset "utf-8";
 @import url("/static/stylesheet.css");
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barriecito&family=Inconsolata:wght@500&display=swap");
+
 
 #form {
     margin: auto;
     position: static;
     width: 12%;
-    font-family: "JosefinSans VariableFont wght";
+    font-family: "Josefin Sans", sans-serif;;
     font-size: 30px;
     height: 8%;
 
@@ -19,7 +22,7 @@
     height: auto;
 }
 #submit {
-	font-family: "JosefinSans VariableFont wght";
+	font-family: "Josefin Sans", sans-serif;;
     font-size: 20px;
     border-bottom-left-radius: 153px auto;
     border-bottom-right-radius: 153px auto;
@@ -51,7 +54,7 @@
 }
 
 #navbar {
-    font-family: "JosefinSans VariableFont wght";
+    font-family: "Josefin Sans", sans-serif;;
     font-size: 30pt;
     background-color: rgba(30,58,138,1.00);
     color: white;
@@ -70,7 +73,7 @@
     background-origin: padding-box;
 }
 .navele {
-    font-family: "JosefinSans VariableFont wght";
+    font-family: "Josefin Sans", sans-serif;;
     font-size: 20pt;
     color: White;
     background-color: rgba(234,179,8,1.00);

@@ -6,9 +6,9 @@
 <link href="/static/listing.css" rel="stylesheet" type="text/css">
 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
+<script src="/static/listing.js"></script>
 <script>
-    function setupPage() {
-    console.log("running")
+   $(function() {
     const listing_id = window.location.pathname.replace("/listing/", "")
     const url = `/getlistings?listing_id=${listing_id}`;
 
@@ -16,7 +16,12 @@
     // Populate dropdown with list of provinces
     $.getJSON(url, function (data) {
         $.each(data, function (key, entry) {
-            console.log(entry)
+            $('#description').prepend(
+                `
+                   <p class="description">${entry.listing_description}</p>
+`);
+
+
             $('#container').prepend(
                 `
                      <h1 class="header">${entry.listing_name}</h1>
@@ -31,19 +36,21 @@
 
 
             $.getJSON(`/getuserinfo/${entry.user_id}`, function (user_data) {
+
                 if (user_data.is_current_user == true) {
+                    console.log("aurth")
                     $('#container').append(
-                        `<a id="delete" href="/deletelisting/${listing_id}">Delete Listing</a>`
+                        `<a class="delete" href="/deletelisting/${listing_id}">Delete Listing</a>`
                     )
                 }
                 $('#container').append(`<a class="contact" href="mailto:${user_data.email}?subject=${entry.listing_name}"> Contact Seller</a>
-<h2 class="price"> ${entry.price}</h2>`);
+<h2 class="price"> $${entry.price}</h2>`);
                 ``
             });
         })
     });
-showSlides(0);
-}
+
+})
 </script>
 <nav id="navbar"> 
 	
@@ -53,7 +60,7 @@ showSlides(0);
 	<a href="/createlisting" class="navele">Create Listing</a>
   </nav>
 
-<body id="body" onload="setupPage()">
+<body id="body" onload="currentSlide(1)">
 
 	<div id="container" class="container">
 
@@ -64,10 +71,13 @@ showSlides(0);
   <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
   <a class="next" onclick="plusSlides(1)">&#10095;</a>
 </div>
-<p class="description">Text Here</p>
+    <div id="description">
+
+    </div>
+
 </body>
 
-<script src="/static/listing.js"></script>
+
 
 
 </html>

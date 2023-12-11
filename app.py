@@ -192,8 +192,11 @@ async def deleteListing(listing_id):
 async def createDB():
     await g.connection.execute(
         """CREATE TYPE categories as ENUM (
-        'test1',
-        'test2'
+        'Clothing',
+        'Furniture',
+        'Electronics',
+        'Sports',
+        'General'
         );""")
     await g.connection.execute(
         """CREATE TABLE IF NOT EXISTS users (
