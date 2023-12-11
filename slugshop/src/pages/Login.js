@@ -8,11 +8,6 @@ import { useGoogleLogin, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/g
 
 export default function Login(){
     
-    const login = useGoogleLogin({
-        onSuccess: window.location.href='localhost:3000/create',
-      });
-    
-    
     return(
 
         <div>
