@@ -1,0 +1,45 @@
+Metadata-Version: 2.1
+Name: quart-uploads
+Version: 0.0.2
+Summary: 
+Home-page: https://github.com/Quart-Addons/quart-uploads
+License: MIT
+Author: Chris Rood
+Author-email: quart.addons@gmail.com
+Requires-Python: >=3.8
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Dist: aiofiles
+Requires-Dist: quart (>=0.19,<0.20)
+Project-URL: Documentation, https://quart-uploads.readthedocs.io/
+Project-URL: Repository, https://github.com/Quart-Addons/quart-uploads
+Description-Content-Type: text/markdown
+
+Quart Uploads
+=============
+
+![Quart Uploads Logo](logos/logo.png)
+
+Quart-Uploads allows your application to flexibly and efficiently handle file
+uploading and serving the uploaded files.
+
+You can create different sets of uploads - one for document attachments, one
+for photos, etc. - and the application can be configured to save them all in
+different places and to generate different URLs for them.
+
+For more information on Quart, [visit here](https://quart.palletsprojects.com/en/latest/)
+
+Quart-Uploads is based on [Flask-Uploads](https://github.com/maxcountryman/flask-uploads>) by maxcountryman. 

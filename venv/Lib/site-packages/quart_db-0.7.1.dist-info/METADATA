@@ -1,0 +1,130 @@
+Metadata-Version: 2.1
+Name: quart-db
+Version: 0.7.1
+Summary: Quart-DB is a Quart extension that provides managed connection(s) to database(s).
+Home-page: https://github.com/pgjones/quart-db/
+License: MIT
+Author: pgjones
+Author-email: philip.graham.jones@googlemail.com
+Requires-Python: >=3.8
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: docs
+Provides-Extra: erdiagram
+Provides-Extra: sqlite
+Requires-Dist: aiosqlite (>=0.17.0) ; extra == "sqlite"
+Requires-Dist: asyncpg (>=0.25.0)
+Requires-Dist: buildpg (>=0.4)
+Requires-Dist: eralchemy2 (>=1.3.2) ; extra == "erdiagram"
+Requires-Dist: psycopg2 (>=2.9.3) ; extra == "erdiagram"
+Requires-Dist: pydata_sphinx_theme ; extra == "docs"
+Requires-Dist: quart (>=0.16.3)
+Requires-Dist: typing_extensions ; python_version < "3.11"
+Project-URL: Repository, https://github.com/pgjones/quart-db/
+Description-Content-Type: text/x-rst
+
+Quart-DB
+========
+
+|Build Status| |docs| |pypi| |python| |license|
+
+Quart-DB is a Quart extension that provides managed connection(s) to
+postgresql or sqlite database(s).
+
+Quickstart
+----------
+
+Quart-DB is used by associating it with an app and a DB (via a URL)
+and then utilising the ``g.connection`` connection,
+
+.. code-block:: python
+
+   from quart import g, Quart, websocket
+   from quart_db import QuartDB
+
+   app = Quart(__name__)
+   db = QuartDB(app, url="postgresql://user:pass@localhost:5432/db_name")
+
+   @app.get("/<int:id>")
+   async def get_count(id: int):
+       result = await g.connection.fetch_val(
+           "SELECT COUNT(*) FROM tbl WHERE id = :id",
+           {"id": id},
+       )
+       return {"count": result}
+
+   @app.post("/")
+   async def set_with_transaction():
+       async with g.connection.transaction():
+           await db.execute("UPDATE tbl SET done = :done", {"done": True})
+           ...
+       return {}
+
+   @app.get("/explicit")
+   async def explicit_usage():
+        async with db.connection() as connection:
+            ...
+
+Contributing
+------------
+
+Quart-DB is developed on `GitHub
+<https://github.com/pgjones/quart-db>`_. If you come across an issue,
+or have a feature request please open an `issue
+<https://github.com/pgjones/quart-db/issues>`_. If you want to
+contribute a fix or the feature-implementation please do (typo fixes
+welcome), by proposing a `merge request
+<https://github.com/pgjones/quart-db/merge_requests>`_.
+
+Testing
+~~~~~~~
+
+The best way to test Quart-DB is with `Tox
+<https://tox.readthedocs.io>`_,
+
+.. code-block:: console
+
+    $ pip install tox
+    $ tox
+
+this will check the code style and run the tests.
+
+Help
+----
+
+The Quart-DB `documentation
+<https://quart-db.readthedocs.io/en/latest/>`_ is the best places to
+start, after that try searching `stack overflow
+<https://stackoverflow.com/questions/tagged/quart>`_ or ask for help
+`on gitter <https://gitter.im/python-quart/lobby>`_. If you still
+can't find an answer please `open an issue
+<https://github.com/pgjones/quart-db/issues>`_.
+
+
+.. |Build Status| image:: https://github.com/pgjones/quart-db/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/pgjones/quart-db/commits/main
+
+.. |docs| image:: https://readthedocs.org/projects/quart-db/badge/?version=latest&style=flat
+   :target: https://quart-db.readthedocs.io/en/latest/
+
+.. |pypi| image:: https://img.shields.io/pypi/v/quart-db.svg
+   :target: https://pypi.python.org/pypi/Quart-DB/
+
+.. |python| image:: https://img.shields.io/pypi/pyversions/quart-db.svg
+   :target: https://pypi.python.org/pypi/Quart-DB/
+
+.. |license| image:: https://img.shields.io/badge/license-MIT-blue.svg
+   :target: https://github.com/pgjones/quart-db/blob/main/LICENSE
+
