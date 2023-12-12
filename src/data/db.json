@@ -1,0 +1,18 @@
+{
+  "listings": [
+    {
+      "name": "Vintage Sweater",
+      "description": "15.99",
+      "images": "L",
+      "category": "New",
+      "id": 1
+    },
+    {
+      "name": "n",
+      "price": "12",
+      "description": "n",
+      "category": "n",
+      "id": 2
+    }
+  ]
+}

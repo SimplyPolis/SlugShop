@@ -1,0 +1,74 @@
+import {BrowserRouter as Router, Routes, Route, BrowserRouter, useParams} from 'react-router-dom';
+import React, {useEffect, useState, componentDidMount, Component, useMemo} from 'react';
+import App from '../App'
+import {directive} from '@babel/types';
+import {AppBar, Avatar, Typography, createTheme, getCardActionsUtilityClass} from '@mui/material';
+import {Toolbar} from '@mui/material';
+import {Container} from '@mui/material';
+import {Grid} from '@mui/material';
+import {Paper} from '@mui/material';
+import {TextField} from '@mui/material';
+import {IconButton} from '@mui/material';
+import {Select} from "@mui/material";
+import {MenuItem} from "@mui/material";
+
+
+export default function CreateListing() {
+    const [values, setValues] = useState([])
+
+    const [name, setName] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const listings = {name, price, description, category};
+        const id = 0;
+        console.log(category)
+        fetch('http://localhost:8000/listings', {    // come back to this.
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(listings)
+        })
+
+    }
+
+
+    return (
+
+        <>
+            
+            <form onSubmit={handleSubmit}>
+                <Grid container className="pt-[1rem] pl-16" spacing={5} columnSpacing={5}>
+                    <Grid item xs={100}>
+
+                        <Typography fontSize="30px">Item Name:</Typography>
+                        <TextField id="standard-basic" variant="standard" value={name}
+                                   onChange={(e) => setName(e.target.value)}/>
+                        <Typography className="" fontSize="30px">Description:</Typography>
+                        <TextField id="standard-basic" variant="standard" value={description}
+                                   onChange={(e) => setDescription(e.target.value)}/>
+                        <Typography className="pr-[6.4rem]" fontSize="30px">Price:</Typography>
+                        <TextField id="standard-basic" variant="standard" type="number" name="price"
+                                   onChange={(e) => setPrice(e.target.value)}/>
+                        <Typography className="pr-[1rem]" fontSize="30px">Category:</Typography>
+                        <TextField id="standard-basic" variant="standard" name="category" value={category}
+                                   onChange={(e) => setCategory(e.target.value)}/>
+
+
+                    </Grid>
+                    <Grid item xs={20}>
+                        <Typography>
+                            <button className="bg-yellow-500 rounded w-20 text-white">
+                                Post
+                            </button>
+
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </form>
+        </>
+    )
+}

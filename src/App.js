@@ -12,6 +12,8 @@ import men_banner from './Components/Assets/banner_mens.png'
 import women_banner from './Components/Assets/banner_women.png'
 import kid_banner from './Components/Assets/banner_kids.png'
 import Profile from './Components/Profile/Profile';
+import CreateListing from './Pages/CreateListing';
+import UserListing from './Pages/UserListing';
 
 function App() {
   return (
@@ -24,11 +26,13 @@ function App() {
         <Route path='/womens' element={<ShopCategory banner={women_banner} category="women"/>}/>
         <Route path='/kids' element={<ShopCategory banner={kid_banner} category="kid"/>}/>
         <Route path="/product" element={<Product/>}>
-          <Route path=':productId' element={<Product/>}/>
+        <Route path=':productId' element={<Product/>}/>
         </Route>
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/login' element={<LoginSignup/>}/>
         <Route path='/profile' element={<Profile />} /> {/* Profile page route */}
+        <Route path='/user' element={<UserListing/>}/>
+        <Route path = '/create' element={<CreateListing/>}/>
       </Routes>
       <Footer/>
       </BrowserRouter>
