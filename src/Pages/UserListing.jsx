@@ -7,24 +7,13 @@ import {Toolbar} from '@mui/material';
 import { Container } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
+import useFetch from './useFetch';
 
 
 export default function UserListing(){
     
     const { id } = useParams();
-    const[listing, setListings] = useState([])
-
-    useEffect(() => {
-        fetch('http://localhost:8000/listings/')
-            .then(res =>{
-                return res.json();
-            })
-            .then(data => {
-                setListings(data);
-                console.log(data);
-            });
-
-    }, [id]);
+    const {data: listings, error, isPending} = useFetch('http://localhost:8000/listings/' + id);
 
     return(
         <>
@@ -39,42 +28,43 @@ export default function UserListing(){
                 </Grid>  
                 <Grid item className=" pt-72" xs={5}> 
         
-                    {listing.map(listing_name => (
+                    {listings && (
                         <Typography fontSize="45px" spacing={30}className="pt-[9rem] pl-[10rem]">
-                            {listing_name.name}
+                            {listings.name}
                         </Typography>
-                    ))}
+                    )}
 
                     <div className=" pl-[9rem]">
                         <Divider className="w-[25rem]"/>
                     </div>
                     
-                    {listing.map(listing_price => (
+                    {listings && (
                         <Typography fontSize="30px" className="pr-44 pl-[10rem]">
-                            ${listing_price.price}
+                        ${listings.price}
                         </Typography>
-                    ))}
+                    )}
+                
 
                     <div className=" pl-[9rem]">
                         <Divider className="w-[18rem]"/>
                     </div>
                     
-                    {listing.map(listing_size => (
+                    {listings && (
                         <Typography fontSize="30px" className="pl-[10rem]">
-                            Category: {listing_size.category}
+                        Category: {listings.category}
                         </Typography>
-                    ))}
-
+                    )}
+                        
                     <div className=" pl-[9rem]">
                         <Divider className="w-[18rem]"/>
                     </div>
 
-                    {listing.map(listing_condition => (
+                    {listings && (
                         <Typography fontSize="30px" className="pl-[10rem]">
-                            Description: {listing_condition.description}
+                        Description: {listings.description}
                         </Typography>
-                    ))}    
-
+                    )}
+                        
                     <div className=" pl-[9rem]">
                         <Divider className="w-[40rem]"/>
                     </div>

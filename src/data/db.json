@@ -6,13 +6,6 @@
       "category": "Clothes",
       "description": "A sweater that is vintage",
       "id": 1
-    },
-    {
-      "name": "PeePee",
-      "price": "14",
-      "description": "PooPoo",
-      "category": "uh",
-      "id": 2
     }
   ]
 }
