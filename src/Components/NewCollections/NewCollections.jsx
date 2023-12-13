@@ -23,6 +23,7 @@ export default NewCollections
 import React, { useState, useEffect } from 'react';
 import './NewCollections.css';
 import Item from '../Item/Item';
+import { Link } from 'react-router-dom';
 
 const NewCollections = () => {
   const [collections, setCollections] = useState([]);
@@ -44,15 +45,20 @@ const NewCollections = () => {
     <div className='new-collections'>
       <h1>NEW LISTINGS</h1>
       <hr />
-      <div className="user-listings">
-        {collections.map((item,i) => (
-          <Item 
-            key={i}  
-            name={item.name} 
-            price={item.price} // Assuming 'price' is the new price
-          />
-        ))}
-      </div>
+      
+      
+        <div className="user-listings">
+          {collections.map((item,i) => (
+            <Link to={`/user/${item.id}`}>
+              <Item 
+                key={i}  
+                name={item.name} 
+                price={item.price} // Assuming 'price' is the new price
+              />
+            </Link>
+          ))}
+        </div>
+      
     </div>
   );
 }

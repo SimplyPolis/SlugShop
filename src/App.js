@@ -31,7 +31,7 @@ function App() {
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/login' element={<LoginSignup/>}/>
         <Route path='/profile' element={<Profile />} /> {/* Profile page route */}
-        <Route path='/user' element={<UserListing/>}/>
+        <Route path='/user/:id' element={<UserListing/>}/>
         <Route path = '/create' element={<CreateListing/>}/>
       </Routes>
       <Footer/>

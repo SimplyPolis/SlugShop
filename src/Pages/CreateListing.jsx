@@ -24,13 +24,14 @@ export default function CreateListing() {
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
+    const [image, setImage] = useState('');
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const listings = {name, price, description, category};
         const id = 0;
-        console.log(category)
+        console.log(image)
         fetch('http://localhost:8000/listings', {    // come back to this.
             method: 'POST',
             headers: {"Content-Type": "application/json"},
@@ -62,7 +63,7 @@ export default function CreateListing() {
                         <br></br>
                         <Typography className="pr-[1rem]" fontSize="30px">Image:</Typography>
                         <br></br>
-                        <TextField type="file" />
+                        <TextField type="file" onChange={(e) => setImage(e.target.value)}/>
                             
 
 

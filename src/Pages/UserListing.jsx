@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, BrowserRouter, useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import App from '../App'
 import { directive } from '@babel/types';
@@ -11,10 +11,11 @@ import { Paper } from '@mui/material';
 
 export default function UserListing(){
     
+    const { id } = useParams();
     const[listing, setListings] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:8000/listings')
+        fetch('http://localhost:8000/listings/')
             .then(res =>{
                 return res.json();
             })
@@ -23,12 +24,10 @@ export default function UserListing(){
                 console.log(data);
             });
 
-    }, []);
+    }, [id]);
 
     return(
         <>
-            
-           
             <Grid container spacing={1} rowSpacing={1}>
                 <Grid item xs={5} spacing={12} className="pt-32">
                     
@@ -91,9 +90,7 @@ export default function UserListing(){
                     </Typography>
                     
                 </Grid>
-            </Grid>
-
-
+            </Grid>            
 
         </>
 
