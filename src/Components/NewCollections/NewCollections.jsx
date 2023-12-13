@@ -29,10 +29,11 @@ const NewCollections = () => {
 
   useEffect(() => {
     // Fetch the JSON file from the public folder
-    fetch('/getlistings_1.json') // Assuming getlistings_1.json is in the public folder
+    fetch('http://localhost:8000/listings') // Assuming getlistings_1.json is in the public folder
       .then(response => response.json())
       .then(data => {
         setCollections(data);
+        console.log(data);
       })
       .catch(error => {
         console.error('There was an error fetching the collections:', error);
@@ -44,12 +45,10 @@ const NewCollections = () => {
       <h1>NEW LISTINGS</h1>
       <hr />
       <div className="user-listings">
-        {collections.map((item, i) => (
+        {collections.map((item,i) => (
           <Item 
-            key={i} 
-            id={item.listing_id} 
-            name={item.listing_name} 
-            image={item.images[0]} // Assuming you want to display the first image
+            key={i}  
+            name={item.name} 
             price={item.price} // Assuming 'price' is the new price
           />
         ))}

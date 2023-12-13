@@ -2,6 +2,7 @@ import React from 'react'
 import './Item.css'
 import { Link } from 'react-router-dom'
 
+
 const Item = (props) => {
   return (
     <div className='item'>
@@ -9,10 +10,10 @@ const Item = (props) => {
       <p>{props.name}</p>
       <div className="item-prices">
         <div className="item-price-new">
-            ${props.new_price}
+            ${props.price}
         </div>
         <div className="item-price-old">
-            ${props.old_price}
+            ${props.price}
         </div>
       </div>
     </div>

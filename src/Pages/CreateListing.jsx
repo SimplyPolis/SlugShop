@@ -11,6 +11,10 @@ import {TextField} from '@mui/material';
 import {IconButton} from '@mui/material';
 import {Select} from "@mui/material";
 import {MenuItem} from "@mui/material";
+import {FormControl} from '@mui/material';
+import {Button} from '@mui/material';
+import { PhotoCamera } from '@mui/icons-material';
+
 
 
 export default function CreateListing() {
@@ -35,12 +39,11 @@ export default function CreateListing() {
 
     }
 
-
     return (
 
         <>
             
-            <form onSubmit={handleSubmit}>
+            <form className="pl-[50rem] pb-44"  onSubmit={handleSubmit}>
                 <Grid container className="pt-[1rem] pl-16" spacing={5} columnSpacing={5}>
                     <Grid item xs={100}>
 
@@ -56,16 +59,24 @@ export default function CreateListing() {
                         <Typography className="pr-[1rem]" fontSize="30px">Category:</Typography>
                         <TextField id="standard-basic" variant="standard" name="category" value={category}
                                    onChange={(e) => setCategory(e.target.value)}/>
+                        <br></br>
+                        <Typography className="pr-[1rem]" fontSize="30px">Image:</Typography>
+                        <br></br>
+                        <TextField type="file" />
+                            
+
 
 
                     </Grid>
                     <Grid item xs={20}>
-                        <Typography>
-                            <button className="bg-yellow-500 rounded w-20 text-white">
-                                Post
-                            </button>
-
-                        </Typography>
+                        <div className="pl-[3rem]">
+                            <Typography>
+                                <button className="bg-yellow-500 rounded w-20 text-white">
+                                    Post
+                                </button>
+                            </Typography>
+                        </div>
+                        
                     </Grid>
                 </Grid>
             </form>

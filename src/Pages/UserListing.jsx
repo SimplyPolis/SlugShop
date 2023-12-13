@@ -40,18 +40,18 @@ export default function UserListing(){
                 </Grid>  
                 <Grid item className=" pt-72" xs={5}> 
         
-                    {listing.map (listing_name => (
-                        <Typography fontSize="30px" spacing={30}className="pt-[9rem]">
+                    {listing.map(listing_name => (
+                        <Typography fontSize="45px" spacing={30}className="pt-[9rem] pl-[10rem]">
                             {listing_name.name}
                         </Typography>
                     ))}
 
                     <div className=" pl-[9rem]">
-                        <Divider className="w-[18rem]"/>
+                        <Divider className="w-[25rem]"/>
                     </div>
                     
                     {listing.map(listing_price => (
-                        <Typography className=" pr-44">
+                        <Typography fontSize="30px" className="pr-44 pl-[10rem]">
                             ${listing_price.price}
                         </Typography>
                     ))}
@@ -61,8 +61,8 @@ export default function UserListing(){
                     </div>
                     
                     {listing.map(listing_size => (
-                        <Typography className="pr-44">
-                            Size: {listing_size.size}
+                        <Typography fontSize="30px" className="pl-[10rem]">
+                            Category: {listing_size.category}
                         </Typography>
                     ))}
 
@@ -71,13 +71,13 @@ export default function UserListing(){
                     </div>
 
                     {listing.map(listing_condition => (
-                        <Typography className="pr-[7rem]">
-                            Condition: {listing_condition.condition}
+                        <Typography fontSize="30px" className="pl-[10rem]">
+                            Description: {listing_condition.description}
                         </Typography>
                     ))}    
 
                     <div className=" pl-[9rem]">
-                        <Divider className="w-[18rem]"/>
+                        <Divider className="w-[40rem]"/>
                     </div>
                     
                 </Grid>
