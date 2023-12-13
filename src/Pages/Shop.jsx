@@ -23,6 +23,8 @@ import Hero from '../Components/Hero/Hero'
 import Popular from '../Components/Popular/Popular'
 import Offers from '../Components/Offers/Offers'
 import NewCollections from '../Components/NewCollections/NewCollections'
+import Navbar from '../Components/Navbar/Navbar'
+import Footer from '../Components/Footer/Footer'
 
 const Shop = () => {
   const newCollectionsRef = useRef(null);
@@ -32,6 +34,8 @@ const Shop = () => {
   }
 
   return (
+    <>
+    <Navbar/>
     <div>
       <Hero scrollToNewCollections={scrollToNewCollections}/>
       <div ref={newCollectionsRef}>
@@ -40,6 +44,8 @@ const Shop = () => {
       <Offers/>
       <Popular/>
     </div>
+    <Footer/>
+    </>
   )
 }
 

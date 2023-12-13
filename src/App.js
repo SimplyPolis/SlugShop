@@ -14,14 +14,19 @@ import kid_banner from './Components/Assets/banner_kids.png'
 import Profile from './Components/Profile/Profile';
 import CreateListing from './Pages/CreateListing';
 import UserListing from './Pages/UserListing';
+import Login from './Pages/Login';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
   return (
     <div>
+    <GoogleOAuthProvider clientId="235433750685-tob4g20h94o3oof65g596u7ltlnkucms.apps.googleusercontent.com">
+      
+  
       <BrowserRouter>
-      <Navbar/>
       <Routes>
-        <Route path='/' element={<Shop/>}/>
+        <Route index element={<Login/>}/>
+        <Route path='/home' element={<Shop/>}/>
         <Route path='/mens' element={<ShopCategory banner={men_banner} category="men"/>}/>
         <Route path='/womens' element={<ShopCategory banner={women_banner} category="women"/>}/>
         <Route path='/kids' element={<ShopCategory banner={kid_banner} category="kid"/>}/>
@@ -29,13 +34,12 @@ function App() {
         <Route path=':productId' element={<Product/>}/>
         </Route>
         <Route path='/cart' element={<Cart/>}/>
-        <Route path='/login' element={<LoginSignup/>}/>
         <Route path='/profile' element={<Profile />} /> {/* Profile page route */}
         <Route path='/user/:id' element={<UserListing/>}/>
         <Route path = '/create' element={<CreateListing/>}/>
       </Routes>
-      <Footer/>
       </BrowserRouter>
+      </GoogleOAuthProvider>
     </div>
   );
 }

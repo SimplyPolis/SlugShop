@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route, BrowserRouter, useParams} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, BrowserRouter, useParams, useNavigate} from 'react-router-dom';
 import React, {useEffect, useState, componentDidMount, Component, useMemo} from 'react';
 import App from '../App'
 import {directive} from '@babel/types';
@@ -14,6 +14,8 @@ import {MenuItem} from "@mui/material";
 import {FormControl} from '@mui/material';
 import {Button} from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
+import Navbar from '../Components/Navbar/Navbar';
+import Footer from '../Components/Footer/Footer';
 
 
 
@@ -25,25 +27,29 @@ export default function CreateListing() {
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [image, setImage] = useState('');
+    const [contact, setContact] = useState('');
+
+    const navigate =useNavigate();
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const listings = {name, price, description, category};
+        const listings = {name, price, description, category, image, contact};
         const id = 0;
         console.log(image)
         fetch('http://localhost:8000/listings', {    // come back to this.
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(listings)
+        }).then(() =>{
+            navigate(-1)
         })
-
     }
 
     return (
 
         <>
-            
+            <Navbar/>
             <form className="pl-[50rem] pb-44"  onSubmit={handleSubmit}>
                 <Grid container className="pt-[1rem] pl-16" spacing={5} columnSpacing={5}>
                     <Grid item xs={100}>
@@ -60,6 +66,9 @@ export default function CreateListing() {
                         <Typography className="pr-[1rem]" fontSize="30px">Category:</Typography>
                         <TextField id="standard-basic" variant="standard" name="category" value={category}
                                    onChange={(e) => setCategory(e.target.value)}/>
+                        <Typography className="pr-[1rem]" fontSize="30px">Contact Email:</Typography>
+                        <TextField id="standard-basic" variant="standard" name="contact" value={category}
+                                   onChange={(e) => setContact(e.target.value)}/>
                         <br></br>
                         <Typography className="pr-[1rem]" fontSize="30px">Image:</Typography>
                         <br></br>
@@ -81,6 +90,7 @@ export default function CreateListing() {
                     </Grid>
                 </Grid>
             </form>
+            <Footer/>
         </>
     )
 }

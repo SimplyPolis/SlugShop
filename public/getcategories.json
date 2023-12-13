@@ -1,8 +1,1 @@
-[
-    {
-        "category": "test1"
-    },
-    {
-        "category": "test2"
-    }
-]
+[{"category":"Clothing"},{"category":"Furniture"},{"category":"Electronics"},{"category":"Sports"},{"category":"General"}]

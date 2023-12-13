@@ -5,6 +5,8 @@
       "price": "15.99",
       "category": "Clothes",
       "description": "A sweater that is vintage",
+      "image": "path",
+      "contact": "mialaniz@ucsc.edu",
       "id": 1
     }
   ]

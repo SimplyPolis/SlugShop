@@ -8,6 +8,8 @@ import { Container } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import useFetch from './useFetch';
+import Footer from '../Components/Footer/Footer';
+import Navbar from '../Components/Navbar/Navbar';
 
 
 export default function UserListing(){
@@ -17,14 +19,15 @@ export default function UserListing(){
 
     return(
         <>
+            <Navbar/>
             <Grid container spacing={1} rowSpacing={1}>
                 <Grid item xs={5} spacing={12} className="pt-32">
-                    
-                        <img 
-                        className = "pt-[8rem] pl-24 w-[40rem]" 
-                        src="https://i.ebayimg.com/images/g/i8gAAOSwSatiDUg1/s-l1600.jpg" 
-                        alt="Placeholder"/>
-                    
+                        {listings && (
+                            <img 
+                            className = "pt-[8rem] pl-24 w-[40rem]" 
+                            src={listings.image} 
+                            alt="Placeholder"/>
+                        )}
                 </Grid>  
                 <Grid item className=" pt-72" xs={5}> 
         
@@ -75,13 +78,17 @@ export default function UserListing(){
                     <Typography className=" pl-[6rem]">
                     Contact Seller:
                     </Typography>
-                    <Typography className=" pl-[6rem]">
-                    mialaniz@ucsc.edu                        
-                    </Typography>
+                    
+                    {listings && (
+                        <Typography className=" pl-[6rem]">
+                            {listings.contact}                       
+                        </Typography>
+                    )}
+                        
                     
                 </Grid>
             </Grid>            
-
+            <Footer/>            
         </>
 
     )

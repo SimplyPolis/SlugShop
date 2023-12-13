@@ -38,6 +38,7 @@ export default Navbar
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
+import { Typography } from '@mui/material';
 
 import logo from '../Assets/navbarlogo.png';
 
@@ -72,7 +73,7 @@ const Navbar = () => {
     <div className='navbar'>
       <div className="nav-logo">
         <img src={logo} alt="" />
-        <Link to="/">
+        <Link to="/home">
           <p>SLUGSHOP</p>
         </Link>
       </div>
@@ -92,6 +93,14 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
+      <div className=" pt-3">
+          <div className="bg-yellow-500 rounded-md w-[7rem]">
+              <Link to="/create" className=" pl-2 bg-yellow-500 rounded w-28 btn btn-primary">
+                  Create Post
+              </Link>
+          </div>
+      </div>
+
       <div className="nav-profile">
         <Link to='/profile'>
           <img 
