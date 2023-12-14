@@ -1,0 +1,165 @@
+
+@charset "utf-8";
+@import url("/static/stylesheet.css");
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barriecito&family=Inconsolata:wght@500&display=swap");
+
+#navbar {
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 30pt;
+    background-color: rgba(30,58,138,1.00);
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    min-width: 0px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow-x: auto;
+    overflow-y: visible;
+    background-repeat: repeat;
+    background-origin: padding-box;
+}
+.navele {
+    font-family: "Josefin Sans", sans-serif;;
+    font-size: 20pt;
+    color: White;
+    background-color: rgba(234,179,8,1.00);
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    /* Chrome and Safari */
+    -webkit-border-top-left-radius: 40px;
+    -webkit-border-top-right-radius: 40px;
+    -webkit-border-bottom-right-radius: 40px;
+    -webkit-border-bottom-left-radius: 40px;
+    /* Firefox */
+    -moz-border-radius-topleft: 40px;
+    -moz-border-radius-topright: 40px;
+    -moz-border-radius-bottomright: 40px;
+    -moz-border-radius-bottomleft: 40px;
+    /* Standard Syntax */
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+.container {
+    width: 50%;
+    padding: 10px;
+    margin: auto;
+    
+}
+
+/* Hide the images by default */
+.image-slides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+	background-color: yellow;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 46.5%;
+  border-radius: 3px 0 0 3px;
+}
+.prev {
+  left: 23%;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  
+}
+
+.header{
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 30pt;
+}
+.price{
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 18pt;
+	float: right;
+}
+.description{
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 12pt;
+}
+.contact{
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 20pt;
+    color: White;
+    background-color: rgba(234,179,8,1.00);
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 18pt;
+	margin:auto;
+	float: right;
+	 -webkit-border-top-left-radius: 40px;
+    -webkit-border-top-right-radius: 40px;
+    -webkit-border-bottom-right-radius: 40px;
+    -webkit-border-bottom-left-radius: 40px;
+    /* Firefox */
+    -moz-border-radius-topleft: 40px;
+    -moz-border-radius-topright: 40px;
+    -moz-border-radius-bottomright: 40px;
+    -moz-border-radius-bottomleft: 40px;
+    /* Standard Syntax */
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
+
+#delete{
+	
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 20pt;
+    color: Black;
+    background-color: rgba(255,0,0,1.00);
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: none;
+	font-family: "Josefin Sans", sans-serif;;
+    font-size: 18pt;
+	margin:auto;
+	float: right;
+	 -webkit-border-top-left-radius: 40px;
+    -webkit-border-top-right-radius: 40px;
+    -webkit-border-bottom-right-radius: 40px;
+    -webkit-border-bottom-left-radius: 40px;
+    /* Firefox */
+    -moz-border-radius-topleft: 40px;
+    -moz-border-radius-topright: 40px;
+    -moz-border-radius-bottomright: 40px;
+    -moz-border-radius-bottomleft: 40px;
+    /* Standard Syntax */
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 40px;
+}
