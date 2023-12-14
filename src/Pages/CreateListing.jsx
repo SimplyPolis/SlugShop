@@ -50,7 +50,7 @@ export default function CreateListing() {
 
         <>
             <Navbar/>
-            <form className="pl-[50rem] pb-44"  onSubmit={handleSubmit}>
+            <form className="pl-[30rem] pb-44"  onSubmit={handleSubmit}>
                 <Grid container className="pt-[1rem] pl-16" spacing={5} columnSpacing={5}>
                     <Grid item xs={100}>
 
