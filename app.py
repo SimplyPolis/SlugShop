@@ -10,13 +10,17 @@ import secrets
 import uuid
 import asyncio
 
+CLIENT_ID = os.environ['CLIENT_ID']
+CLIENT_SECRET = os.environ['CLIENT_SECRET']
+authorization_base_url = 'https://accounts.google.com/o/oauth2/auth'
+token_url = "https://accounts.google.com/o/oauth2/token"
+get_user_info = 'https://www.googleapis.com/userinfo/v2/me?alt=json&access_token={}'
 app_url = "https://localhost:5000"
 
 app = Quart(__name__)
 app.secret_key = secrets.token_urlsafe(16)
 
-db_url = f"postgresql://postgres:{os.environ['DATABASE_PASSWORD']}@localhost:5432/slugshop"
-db = QuartDB(app, url=db_url)
+db = QuartDB(app, url=f"postgresql://postgres:{os.environ["DATABASE_PASSWORD"]}@localhost:5432/slugshop")
 
 app.config["UPLOADED_PHOTOS_DEST"] = 'listingpics'
 uploaded_photos = UploadSet('photos', IMAGES)
@@ -76,36 +80,10 @@ async def listings():
 async def getListings():
     req_dict = request.args
     try:
-        listings = await asyncio.gather(
-    g.connection.fetch_all(
-        "SELECT * FROM listings WHERE "
-        "{}"
-        "{}"
-        "{}"
-        "{}"
-        "sold = :sold_status ORDER BY "
-        "{}"
-        ":sort LIMIT :limit OFFSET :offset;".format(
-            "query @@ websearch_to_tsquery('english', :query) and " if req_dict.get("query") else "",
-            "user_id = :user_id and " if req_dict.get("user_id") else "",
-            "listing_id = :listing_id and " if req_dict.get("listing_id") else "",
-            "category = :category and " if req_dict.get("category") else "",
-            "TS_RANK(query, websearch_to_tsquery('english', :query)) DESC, " if req_dict.get("query") else "",
-        ),
-        {
-            "sold_status": req_dict.get("sold", False),
-            "sort": req_dict.get("sort", "creation_date"),
-            "limit": req_dict.get("limit", 50),
-            "offset": req_dict.get("offset", 0),
-            "query": req_dict.get("query"),
-            "user_id": req_dict.get("user_id"),
-            "category": req_dict.get("category"),
-            "listing_id": req_dict.get("listing_id"),
-        }
-    ),
-    return_exceptions=True
-)[0]
-
+        listings =(await asyncio.gather(g.connection.fetch_all(
+        f"SELECT * FROM listings WHERE {"query @@ websearch_to_tsquery('english',:query) and" if req_dict.get("query") else ""} {"user_id = :user_id and" if req_dict.get("user_id") else ""} {"listing_id = :listing_id and" if req_dict.get("listing_id") else ""} {"category = :category and" if req_dict.get("category") else ""} sold = :sold_status ORDER BY {"TS_RANK(query,websearch_to_tsquery('english',:query)) DESC,"if req_dict.get("query") else ""} :sort LIMIT :limit OFFSET :offset;",
+        {"sold_status": req_dict.get("sold", False), "sort": req_dict.get("sort", "creation_date"),
+         "limit": req_dict.get("limit", 50), "offset": req_dict.get("offset", 0), "query": req_dict.get("query"),"user_id":req_dict.get("user_id"),"category":req_dict.get("category"),"listing_id":req_dict.get("listing_id")}), return_exceptions=True))[0]
     except:
         listings=[]
     if type(listings) != list:
@@ -264,5 +242,5 @@ async def deletedb():
 async def redirect_to_login(*_):
     return redirect(url_for("login"))
 
-if __name__ == "__main__":
-    app.run(host="localhost", port=5000, certfile="localhost.pem", keyfile="localhost-key.pem")
+
+app.run(host="localhost", port=5000, certfile="localhost.pem", keyfile="localhost-key.pem")

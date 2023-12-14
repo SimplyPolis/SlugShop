@@ -72,6 +72,8 @@ export default Profile;
 import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import Item from '../Item/Item'; // Assuming Item is the component to display each listing
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -102,6 +104,8 @@ const Profile = () => {
   }, []);
 
   return (
+    <>
+    <Navbar/>
     <div className='profile'>
       <div className="profile-header">
         <img src={userData.profile} alt="Profile" className="profile-picture" />
@@ -120,6 +124,9 @@ const Profile = () => {
         ))}
       </div>
     </div>
+    <Footer/>
+
+    </>
   );
 }
 

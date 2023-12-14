@@ -79,21 +79,21 @@ const Navbar = () => {
       </div>
       <ul className="nav-menu">
         <li onClick={() => setMenu("shop")}>
-          <Link style={{ textDecoration: 'none' }} to='/'>
+          <Link style={{ textDecoration: 'none' }} to='/home'>
             Home
           </Link>
           {menu === "shop" ? <hr /> : <></>}
         </li>
         {categories.map((category, i) => (
           <li key={i} onClick={() => setMenu(category.category)}>
-            <Link style={{ textDecoration: 'none' }} to={`/listings?category=${category.category}`}>
+            <Link style={{ textDecoration: 'none' }} to={`/${category.category}`}>
               {category.category.charAt(0).toUpperCase() + category.category.slice(1)}
             </Link>
             {menu === category.category ? <hr /> : <></>}
           </li>
         ))}
       </ul>
-      <div className=" pt-3">
+      <div className=" pt-4">
           <div className="bg-yellow-500 rounded-md w-[7rem]">
               <Link to="/create" className=" pl-2 bg-yellow-500 rounded w-28 btn btn-primary">
                   Create Post

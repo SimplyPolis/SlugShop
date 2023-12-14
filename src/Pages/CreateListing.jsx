@@ -14,6 +14,7 @@ import {MenuItem} from "@mui/material";
 import {FormControl} from '@mui/material';
 import {Button} from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
+import {InputLabel} from '@mui/material';
 import Navbar from '../Components/Navbar/Navbar';
 import Footer from '../Components/Footer/Footer';
 
@@ -61,13 +62,25 @@ export default function CreateListing() {
                         <TextField id="standard-basic" variant="standard" value={description}
                                    onChange={(e) => setDescription(e.target.value)}/>
                         <Typography className="pr-[6.4rem]" fontSize="30px">Price:</Typography>
-                        <TextField id="standard-basic" variant="standard" type="number" name="price"
+                        <TextField id="standard-basic" variant="standard" name="price"
                                    onChange={(e) => setPrice(e.target.value)}/>
                         <Typography className="pr-[1rem]" fontSize="30px">Category:</Typography>
-                        <TextField id="standard-basic" variant="standard" name="category" value={category}
-                                   onChange={(e) => setCategory(e.target.value)}/>
+                        <Select
+                        className=" w-[13rem]"
+                        id="standard-basic"
+                        value={category}
+                        label="Age"
+                        onChange={(e) => setCategory(e.target.value)}
+                        >
+                        <MenuItem value={"Clothing"}>Clothing</MenuItem>
+                        <MenuItem value ={"Furniture"}>Furniture</MenuItem>
+                        <MenuItem value={"Electronics"}>Electronics</MenuItem>
+                        <MenuItem value ={"Sports"}>Sports</MenuItem>
+
+                        </Select>
+
                         <Typography className="pr-[1rem]" fontSize="30px">Contact Email:</Typography>
-                        <TextField id="standard-basic" variant="standard" name="contact" value={category}
+                        <TextField id="standard-basic" variant="standard" name="contact" value={contact}
                                    onChange={(e) => setContact(e.target.value)}/>
                         <br></br>
                         <Typography className="pr-[1rem]" fontSize="30px">Image:</Typography>

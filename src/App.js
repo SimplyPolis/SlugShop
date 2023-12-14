@@ -15,6 +15,11 @@ import Profile from './Components/Profile/Profile';
 import CreateListing from './Pages/CreateListing';
 import UserListing from './Pages/UserListing';
 import Login from './Pages/Login';
+import Sports from './Pages/Sports';
+import General from './Pages/General';
+import Electronics from './Pages/Electronics';
+import Furniture from './Pages/Furniture';
+import Clothing from './Pages/Clothing';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function App() {
@@ -37,6 +42,11 @@ function App() {
         <Route path='/profile' element={<Profile />} /> {/* Profile page route */}
         <Route path='/user/:id' element={<UserListing/>}/>
         <Route path = '/create' element={<CreateListing/>}/>
+        <Route path='/Clothing' element={<Clothing/>}/>
+        <Route path= '/Furniture' element={<Furniture/>}/>
+        <Route path='/Electronics' element={<Electronics/>}/>
+        <Route path='/General' element={<General/>}/>
+        <Route path='/Sports' element={<Sports/>}/>
       </Routes>
       </BrowserRouter>
       </GoogleOAuthProvider>
