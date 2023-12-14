@@ -17,16 +17,17 @@
 
    <form id="form" action="javascript:updatePage()">
 <input  type="search" id="query" name="query" placeholder="Search">
-<br><input class="radio_buttons" type="radio" id="date_desc" name="sort" value="creation_date DESC">
+<!--
+       <br><input class="radio_buttons" type="radio" id="date_desc" name="sort" value="creation_date DESC">
   <label class="radio_buttons" for="date_desc">Date descending</label>
   <br><input class="radio_buttons" type="radio" id="date_asc" name="sort" value="creation_date ASC">
   <label class="radio_buttons" for="date_asc">Date ascending </label>
 <br><input class="radio_buttons" type="radio" id="price_desc" name="sort" value="price DESC">
   <label class="radio_buttons" for="price_desc">Price descending</label>
   <br><input class="radio_buttons" type="radio" id="price_asc" name="sort" value="price ASC">
-  <label class="radio_buttons" for="price_asc">Price ascending </label>
+  <label class="radio_buttons" for="price_asc">Price ascending </label> -->
 	   <label for="categories">Category:</label>
-    <select id="categories" class="radio_buttons" name="categories">
+    <select id="categories" class="radio_buttons" name="category">
     </select>
     <button id="submit" type="submit">Search</button>
 </form>
@@ -44,6 +45,7 @@
          let search = new URLSearchParams(formData);
          console.log(search.toString())
        const url = `/getlistings?${search.toString()}`;
+         console.log(url)
         $.getJSON(url, function (data) {
             $.each(data, function (key, entry) {
                      $('#ol').append(`<li class="listelm">

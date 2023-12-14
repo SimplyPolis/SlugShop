@@ -16,7 +16,7 @@
   </nav>
 
   
-<h2 id="recent">Recent Listings</h2>
+<h2 id="recent">My Listings</h2>
 <main id="main">
 <ol id="ol">
 	
@@ -27,8 +27,12 @@
 
 <script>
     $(function () {
-        const url = '/getlistings';
+        $.getJSON("/getcurrentuser", function (user_data) {
+            id=user_data.user_id
+            console.log(id)
 
+        const url = `/getlistings?user_id=${id}`;
+        console.log(url)
         // Populate dropdown with list of provinces
         $.getJSON(url, function (data) {
             $.each(data, function (key, entry) {
@@ -40,7 +44,7 @@
 
             })
         });
-
+});
     })
 </script>
 	
