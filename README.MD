@@ -1,8 +1,8 @@
-#Code#
+#Code
 Actual project code
 
-#SCRUM_Docs#
+#SCRUM_Docs
 All of our scrum docs
 
-#Pages Docs#
+#Pages Docs
 Documentation for specific aspects of the project
